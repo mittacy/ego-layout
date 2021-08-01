@@ -1,0 +1,37 @@
+server:
+  env: debug        # debug/test/release
+  name: ego-layout
+  version: v1
+  port: 10023
+  readTimeout: 10     # 读等待时间，单位: 秒
+  writeTimeout: 10    # 写等待时间，单位: 秒
+log:
+  path: ./logs        # 日志目录, 不要在最后加/
+  maxSize: 1          # 文件大小限制,单位MB
+  maxBackups: 50      # 最大保留日志文件数量
+  maxAge: 21          # 日志文件保留天数
+  compress: false     # 是否压缩日志
+mysql:
+  MYSQLKEY:
+    host: 127.0.0.1
+    database: database
+    port: 3306
+    user: root
+    password: password
+    params: parseTime=True
+redis:
+  expire: 24          # 缓存有效期，单位:小时
+  deviation: 5        # 随机偏移范围,例如 expire=24&deviation=1 => 真正过期时间在23~25h之间随机
+  REDISKEY:
+    network: tcp
+    host: 127.0.0.1
+    port: 6379
+    password:
+    db: 0               # 数据库
+    maxIdle: 20         # 最大空闲连接数
+    maxActive: 500      # 连接池最大数目,为0则不限制
+    idleTimeout: 60     # 空闲连接超时时间，超过时间的空闲连接会被关闭,为0将不会被关闭,应该设置一个比redis服务端超时时间更短的时间，单位: 秒
+    wait: true          # 如果为true且已经达到MaxActive的限制，则等待连接池，为false将直接返回错误
+    maxConnLifeTime: 0  # 一个连接的生命时长，超时而且没被使用则被释放, 如果为0则不根据生命周期来关闭连接，单位: 秒
+jwt:
+  expire: 24          # token有效期，单位:小时
