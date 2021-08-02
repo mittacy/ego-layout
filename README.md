@@ -104,37 +104,21 @@ docs：https://app.gitbook.com/@mittacychen/s/ego
 + 安装Mysql（如果需要）
 + 安装Redis（如果需要）
 
-### 2. ego工具
+### 2. 修改配置文件
 
-使用ego工具可以快速生成项目骨架以及生成业务代码，具体使用可查看文档：[ego](https://app.gitbook.com/@mittacychen/s/ego/ego-gong-ju)
-
-```shell
-# 安装ego
-$ go get -u github.com/mittacy/ego@latest
-
-# 生成项目骨架
-$ ego new projectName
-```
-
-### 3. 修改配置文件
-
-配置文件位于项目根目录 `default.yaml ` 和 `dev.yaml`，建议在本地开发时修改 dev.yaml，在.gitignore 中已经添加了忽略 `dev.yaml` 文件，修改对应的配置信息：
+配置文件位于项目根目录 `default.yaml`，修改对应的配置信息：
 
 + server 服务端口
 + mysql 地址、用户名、密码
 + redis
 
-### 4. 启动服务
+### 3. 启动服务
 
 ```shell
-$ cd projectName
+$ cd myProjectName
 $ go mod download
-$ go run main.go -config dev.yaml
+$ go run main.go -config default.yaml
 ```
 
 > -config 参数，配置文件路径，默认为 `default.yaml`
-
-
-
-接下来就可以开始愉快地业务代码了
 
