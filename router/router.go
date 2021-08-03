@@ -15,12 +15,8 @@ func InitRouter(r *gin.Engine) {
 	userApi := InitUserApi(db.GetGormDB("MYSQLKEY"), cache.GetRedisPool("REDISKEY"))
 
 	// 2. 全局中间件
-	requestLogger := logger.NewLogger("request")
-	if requestLogger == nil {
-		panic("创建请求日志失败")
-	}
-	r.Use(ginzap.Ginzap(requestLogger, time.RFC3339, true))
-	r.Use(ginzap.RecoveryWithZap(requestLogger, true))
+	r.Use(ginzap.Ginzap(logger.GetRequestLogger(), time.RFC3339, true))
+	r.Use(ginzap.RecoveryWithZap(logger.GetRequestLogger(), true))
 	//r.Use(middleware.CorsMiddleware())
 
 	// 3. 初始化路由

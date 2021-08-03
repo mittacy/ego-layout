@@ -7,10 +7,10 @@ server:
   writeTimeout: 10    # 写等待时间，单位: 秒
 log:
   path: ./logs        # 日志目录, 不要在最后加/
-  maxSize: 1          # 文件大小限制,单位MB
-  maxBackups: 50      # 最大保留日志文件数量
-  maxAge: 21          # 日志文件保留天数
-  compress: false     # 是否压缩日志
+  bizMaxAge: 7        # 指定保留多少天的业务日志
+  bizErrMaxAge: 7     # 指定保留多少天的业务错误日志
+  callMaxAge: 7       # 指定保留多少天的请求日志
+  minLevel: debug     # 日志级别：debug、info、warn、error
 mysql:
   MYSQLKEY:
     host: 127.0.0.1

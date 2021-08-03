@@ -1,12 +1,12 @@
 package bootstrap
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/mittacy/ego-layout/pkg/checker"
 	"github.com/mittacy/ego-layout/pkg/config"
 	"github.com/mittacy/ego-layout/pkg/jwt"
 	"github.com/mittacy/ego-layout/pkg/logger"
 	"github.com/mittacy/ego-layout/pkg/store/cache"
-	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
 
