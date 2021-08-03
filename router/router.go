@@ -1,10 +1,13 @@
 package router
 
 import (
+	ginzap "github.com/gin-contrib/zap"
+	"github.com/gin-gonic/gin"
 	"github.com/mittacy/ego-layout/pkg/config"
+	"github.com/mittacy/ego-layout/pkg/logger"
 	"github.com/mittacy/ego-layout/pkg/store/cache"
 	"github.com/mittacy/ego-layout/pkg/store/db"
-	"github.com/gin-gonic/gin"
+	"time"
 )
 
 func InitRouter(r *gin.Engine) {
@@ -12,7 +15,12 @@ func InitRouter(r *gin.Engine) {
 	userApi := InitUserApi(db.GetGormDB("MYSQLKEY"), cache.GetRedisPool("REDISKEY"))
 
 	// 2. 全局中间件
-	r.Use(gin.Recovery())
+	requestLogger := logger.NewLogger("request")
+	if requestLogger == nil {
+		panic("创建请求日志失败")
+	}
+	r.Use(ginzap.Ginzap(requestLogger, time.RFC3339, true))
+	r.Use(ginzap.RecoveryWithZap(requestLogger, true))
 	//r.Use(middleware.CorsMiddleware())
 
 	// 3. 初始化路由
