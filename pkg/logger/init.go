@@ -17,6 +17,11 @@ func Init() {
 		panic(fmt.Sprintf("获取日志配置错误: %v", err))
 	}
 
+	requestLogger = NewLogger("request")
+	if requestLogger == nil {
+		panic("创建请求日志失败")
+	}
+
 	InitBizLogger()
 }
 
@@ -33,10 +38,5 @@ func InitBizLogger() {
 // GetRequestLogger 获取请求日志句柄
 // @return *zap.Logger
 func GetRequestLogger() *zap.Logger {
-	requestLogger = NewLogger("request")
-	if requestLogger == nil {
-		panic("创建请求日志失败")
-	}
-
 	return requestLogger
 }

@@ -12,6 +12,10 @@ import (
 )
 
 func NewLogger(name string) *zap.Logger {
+	if name == "" {
+		name = "default"
+	}
+
 	// 低级日志 Core
 	zapConf := ZapConf{
 		ServerName:   config.Global.Server.Name,
@@ -103,23 +107,21 @@ func newCore(conf ZapConf) (zapcore.Core, error) {
 }
 
 // getWriter 获取日志分割 Writer
-// @param path 日志目录地址
-// @param name 日志标识名，用来区分多个日志
+// @param name 日志目录+名字, eg: ./logs/info/default
 // @param rotationTime 分割日志时间，单位：小时
 // @param maxAge 日志保留天数
 // @return zapcore.WriteSyncer
-func getWriter(path, name string, rotationTime, maxAge time.Duration) (io.Writer, error) {
-	fmt.Println("path: ", path)
+func getWriter(dir, name string, rotationTime, maxAge time.Duration) (io.Writer, error) {
+	file := dir + name
 	if rotationTime < 24 {
-		path += name + "_%Y-%m-%d-H.log"
+		file += "_%Y-%m-%d-H.log"
 	} else {
-		path += name + "_%Y-%m-%d.log"
+		file += "_%Y-%m-%d.log"
 	}
-	fmt.Println("path: ", path)
 
 	writer, err := rotatelogs.New(
-		path,
-		rotatelogs.WithLinkName(name),
+		file,
+		rotatelogs.WithLinkName(dir + "." + name),
 		rotatelogs.WithMaxAge(time.Hour*24*maxAge),
 		rotatelogs.WithRotationTime(time.Hour*rotationTime),
 	)
