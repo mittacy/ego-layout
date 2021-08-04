@@ -26,7 +26,7 @@ func Init() {
 	}
 
 	// 5. 初始化 Cache 配置
-	cache.InitCache()
+	cache.Init()
 
 	// 5. 初始化token
 	tokenCache := cache.GetCustomRedisByConf("REDISKEY", "token")

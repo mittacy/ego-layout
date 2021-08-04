@@ -19,7 +19,7 @@ func InitViper() {
 		panic(err)
 	}
 
-	// 解析到全局配置文件中
+	// 解析Server配置
 	if err := viper.UnmarshalKey("server", &ServerConfig); err != nil {
 		panic(err)
 	}

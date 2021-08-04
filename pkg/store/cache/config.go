@@ -14,7 +14,7 @@ var (
 	GlobalRedisConf Redis
 )
 
-func InitCache() {
+func Init() {
 	if err := viper.UnmarshalKey(RedisConnPrefix, &GlobalRedisConf); err != nil {
 		panic(fmt.Sprintf("cache init err: %s", err))
 	}

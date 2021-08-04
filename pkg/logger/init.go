@@ -22,10 +22,10 @@ func Init() {
 		panic("创建请求日志失败")
 	}
 
-	InitBizLogger()
+	initBizLogger()
 }
 
-func InitBizLogger() {
+func initBizLogger() {
 	bizLogger = NewLogger("")
 	if bizLogger == nil {
 		panic("创建日志失败")
