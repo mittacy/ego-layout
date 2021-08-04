@@ -3,7 +3,7 @@ package logger
 import (
 	"fmt"
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
-	"github.com/mittacy/ego-layout/pkg/config"
+	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"io"
@@ -18,7 +18,6 @@ func NewLogger(name string) *zap.Logger {
 
 	// 低级日志 Core
 	zapConf := ZapConf{
-		ServerName:   config.Global.Server.Name,
 		Path:         conf.Path + "/info/",
 		Name:         name,
 		JsonFormat:   true,
@@ -27,6 +26,10 @@ func NewLogger(name string) *zap.Logger {
 		MinLevel:     parseLevel(conf.MinLevel),
 		HighLevel:    zapcore.WarnLevel,
 	}
+	if err := viper.UnmarshalKey("server.name", &zapConf.ServerName); err != nil {
+		panic(fmt.Sprintf("new logger err: %s", err))
+	}
+
 	zapConf.CheckConf()
 
 	lowCore, err := newCore(zapConf)

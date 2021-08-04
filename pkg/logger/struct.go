@@ -8,6 +8,7 @@ import (
 )
 
 type LogConf struct {
+	ServerName   string        `mapstructure:"serverName"`
 	Path         string        `mapstructure:"path"`
 	BizMaxAge    time.Duration `mapstructure:"bizMaxAge"`
 	BizErrMaxAge time.Duration `mapstructure:"bizErrMaxAge"`

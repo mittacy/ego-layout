@@ -3,7 +3,7 @@ package cache
 import (
 	"fmt"
 	"github.com/gomodule/redigo/redis"
-	"github.com/mittacy/ego-layout/pkg/config"
+	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"math/rand"
 )
@@ -34,10 +34,15 @@ func GetCustomRedisByPool(pool *redis.Pool, apiName string) CustomRedis {
 		zap.S().Panicf("连接redis失败, 检查redis配置, err: %s", err)
 	}
 
+	var serverName string
+	if err := viper.UnmarshalKey("server.name", &serverName); err != nil {
+		panic(fmt.Sprintf("get redis err: %s", err))
+	}
+
 	return CustomRedis{
 		apiName:        apiName,
 		pool:           pool,
-		cachePrefixKey: fmt.Sprintf("%s:%s", config.Global.Server.Name, apiName),
+		cachePrefixKey: fmt.Sprintf("%s:%s", serverName, apiName),
 		expireRange:    NewExpireRange(GlobalRedisConf.Expire, GlobalRedisConf.Deviation),
 	}
 }

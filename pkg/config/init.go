@@ -5,12 +5,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-var Global global
-
-type global struct {
-	Server `mapstructure:"server"`
-	Jwt    `mapstructure:"jwt"`
-}
+var ServerConfig Server
 
 // InitViper 初始化Viper
 func InitViper() {
@@ -25,7 +20,7 @@ func InitViper() {
 	}
 
 	// 解析到全局配置文件中
-	if err := viper.Unmarshal(&Global); err != nil {
+	if err := viper.UnmarshalKey("server", &ServerConfig); err != nil {
 		panic(err)
 	}
 }

@@ -15,7 +15,7 @@ func Init() {
 	config.InitViper()
 
 	// 2. 设置gin的运行模式
-	gin.SetMode(config.Global.Server.Env)
+	gin.SetMode(config.ServerConfig.Env)
 
 	// 3. 初始化全局日志
 	logger.Init()

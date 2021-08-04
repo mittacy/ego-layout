@@ -1,6 +1,7 @@
 package router
 
 import (
+	"fmt"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 	"github.com/mittacy/ego-layout/pkg/config"
@@ -20,7 +21,8 @@ func InitRouter(r *gin.Engine) {
 	//r.Use(middleware.CorsMiddleware())
 
 	// 3. 初始化路由
-	relativePath := "/api/" + config.Global.Server.Version
+	fmt.Println(config.ServerConfig)
+	relativePath := "/api/" + config.ServerConfig.Version
 	g := r.Group(relativePath) // 统一前缀
 	{
 		g.POST("/user", userApi.Create)

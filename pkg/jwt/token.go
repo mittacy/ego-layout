@@ -2,10 +2,10 @@ package jwt
 
 import (
 	"fmt"
-	"github.com/mittacy/ego-layout/pkg/config"
-	"github.com/mittacy/ego-layout/pkg/store/cache"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/mittacy/ego-layout/pkg/store/cache"
 	"github.com/pkg/errors"
+	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"strings"
 	"time"
@@ -30,7 +30,11 @@ type TokenData struct {
 // InitToken 初始化
 // @param expireHours
 func InitToken(customRedis cache.CustomRedis) {
-	expire := config.Global.Jwt.Expire
+	var expire time.Duration
+	if err := viper.UnmarshalKey("jwt.expire", &expire); err != nil {
+		panic(fmt.Sprintf("jwt init err: %s", err))
+	}
+
 	Token = NewToken(expire, customRedis)
 }
 
@@ -38,12 +42,18 @@ func InitToken(customRedis cache.CustomRedis) {
 // @param expireHours token过期时间，单位：小时
 // @param cache redis操作句柄
 // @return *token token句柄
-func NewToken(expireHours time.Duration, customRedis cache.CustomRedis) *token {
-	expire := expireHours * time.Second * 3600
+func NewToken(expire time.Duration, customRedis cache.CustomRedis) *token {
+	expire = expire * time.Second * 3600
+
+	var serverName string
+	if err := viper.UnmarshalKey("server.name", &serverName); err != nil {
+		panic(fmt.Sprintf("get redis err: %s", err))
+	}
+
 	return &token{
 		Expire: expire,
 		Cache: customRedis,
-		BlackName: fmt.Sprintf("%s:token:blacklist", config.Global.Server.Name),
+		BlackName: fmt.Sprintf("%s:token:blacklist", serverName),
 	}
 }
 

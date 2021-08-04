@@ -21,7 +21,7 @@ func main() {
 	// 初始化路由
 	router.InitRouter(r)
 
-	serverConfig := config.Global.Server
+	serverConfig := config.ServerConfig
 	s := &http.Server{
 		Addr: ":" + strconv.Itoa(serverConfig.Port),
 		Handler: r,
