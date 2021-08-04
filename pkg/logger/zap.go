@@ -8,6 +8,7 @@ import (
 	"go.uber.org/zap/zapcore"
 	"io"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -16,15 +17,14 @@ func NewLogger(name string) *zap.Logger {
 		name = "default"
 	}
 
-	// 低级日志 Core
 	zapConf := ZapConf{
-		Path:         conf.Path + "/info/",
+		Path:         conf.Path,
 		Name:         name,
 		JsonFormat:   true,
 		RotationTime: 24,
 		MaxAge:       conf.BizMaxAge,
 		MinLevel:     parseLevel(conf.MinLevel),
-		HighLevel:    zapcore.WarnLevel,
+		HighLevel:    zapcore.FatalLevel,
 	}
 	if err := viper.UnmarshalKey("server.name", &zapConf.ServerName); err != nil {
 		panic(fmt.Sprintf("new logger err: %s", err))
@@ -37,19 +37,7 @@ func NewLogger(name string) *zap.Logger {
 		panic(fmt.Sprintf("logger err: %v", err))
 	}
 
-	// 高级日志 Core
-	zapConf.Path = conf.Path + "/error/"
-	zapConf.MinLevel = zapcore.ErrorLevel
-	zapConf.MaxAge = conf.BizErrMaxAge
-	zapConf.CheckConf()
-
-	highCore, err := newCore(zapConf)
-	if err != nil {
-		panic(fmt.Sprintf("logger err: %v", err))
-	}
-
-	coreArr := []zapcore.Core{lowCore, highCore}
-
+	coreArr := []zapcore.Core{lowCore}
 	return zap.New(zapcore.NewTee(coreArr...), zap.AddStacktrace(zapcore.WarnLevel), zap.Fields(zapcore.Field{
 		Key:    "module_name",
 		Type:   zapcore.StringType,
@@ -115,7 +103,9 @@ func newCore(conf ZapConf) (zapcore.Core, error) {
 // @param maxAge 日志保留天数
 // @return zapcore.WriteSyncer
 func getWriter(dir, name string, rotationTime, maxAge time.Duration) (io.Writer, error) {
-	file := dir + name
+	dir = strings.Trim(dir, "/")
+	file := fmt.Sprintf("%s/%s", dir, name)
+
 	if rotationTime < 24 {
 		file += "_%Y-%m-%d-H.log"
 	} else {
@@ -124,7 +114,7 @@ func getWriter(dir, name string, rotationTime, maxAge time.Duration) (io.Writer,
 
 	writer, err := rotatelogs.New(
 		file,
-		rotatelogs.WithLinkName(dir + "." + name),
+		rotatelogs.WithLinkName(dir + "/." + name),
 		rotatelogs.WithMaxAge(time.Hour*24*maxAge),
 		rotatelogs.WithRotationTime(time.Hour*rotationTime),
 	)
@@ -135,3 +125,4 @@ func getWriter(dir, name string, rotationTime, maxAge time.Duration) (io.Writer,
 
 	return writer, nil
 }
+
