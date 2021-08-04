@@ -2,7 +2,6 @@ package db
 
 import (
 	"fmt"
-	"github.com/mittacy/ego-layout/pkg/config"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"gorm.io/driver/mysql"
@@ -22,13 +21,13 @@ func init() {
 // @param name 数据库配置名
 // @return *gorm.DB
 func GetGormDB(name string) *gorm.DB {
-	key := config.MysqlDBPrefix + name
+	key := fmt.Sprintf("%s.%s", MysqlDBPrefix, name)
 
 	if db, ok := dbPool[key]; ok {
 			return db
 		}
 
-	var dbConfig config.Mysql
+	var dbConfig MysqlConf
 	if err := viper.UnmarshalKey(key, &dbConfig); err != nil {
 		zap.S().Panicf("连接数据库失败, 检查%s的配置, err: %s", key, err)
 	}
@@ -47,7 +46,7 @@ func GetGormDB(name string) *gorm.DB {
 // @param conf 连接配置信息
 // @return *gorm.DB
 // @return error
-func ConnectGorm(conf config.Mysql) (*gorm.DB, error) {
+func ConnectGorm(conf MysqlConf) (*gorm.DB, error) {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s", conf.User, conf.Password, conf.Host, conf.Port, conf.Database)
 	if conf.Params != "" {
 		dsn = fmt.Sprintf("%s?%s", dsn, conf.Params)

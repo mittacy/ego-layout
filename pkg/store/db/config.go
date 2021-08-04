@@ -1,10 +1,10 @@
-package config
+package db
 
 const (
-	MysqlDBPrefix = "mysql."
+	MysqlDBPrefix = "mysql"
 )
 
-type Mysql struct {
+type MysqlConf struct {
 	Host     string `mapstructure:"host"`
 	Port     int    `mapstructure:"port"`
 	Database string `mapstructure:"database"`
