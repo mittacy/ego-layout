@@ -2,8 +2,8 @@ package cache
 
 import (
 	"fmt"
-	"github.com/mittacy/ego-layout/pkg/config"
 	"github.com/gomodule/redigo/redis"
+	"github.com/mittacy/ego-layout/pkg/config"
 	"go.uber.org/zap"
 	"math/rand"
 )
@@ -38,7 +38,7 @@ func GetCustomRedisByPool(pool *redis.Pool, apiName string) CustomRedis {
 		apiName:        apiName,
 		pool:           pool,
 		cachePrefixKey: fmt.Sprintf("%s:%s", config.Global.Server.Name, apiName),
-		expireRange:    NewExpireRange(config.Global.Redis.Expire, config.Global.Redis.Deviation),
+		expireRange:    NewExpireRange(GlobalRedisConf.Expire, GlobalRedisConf.Deviation),
 	}
 }
 

@@ -9,7 +9,6 @@ var Global global
 
 type global struct {
 	Server `mapstructure:"server"`
-	Redis  `mapstructure:"redis"`
 	Jwt    `mapstructure:"jwt"`
 }
 

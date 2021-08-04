@@ -21,7 +21,7 @@ mysql:
     params: parseTime=True
 redis:
   expire: 24          # 缓存有效期，单位:小时
-  deviation: 5        # 随机偏移范围,例如 expire=24&deviation=1 => 真正过期时间在23~25h之间随机
+  deviation: 5        # 随机偏移范围,例如:expire=24&deviation=1,则真正过期时间在23~25h之间随机
   REDISKEY:
     network: tcp
     host: 127.0.0.1

@@ -2,7 +2,6 @@ package cache
 
 import (
 	"fmt"
-	"github.com/mittacy/ego-layout/pkg/config"
 	"github.com/gomodule/redigo/redis"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
@@ -21,13 +20,13 @@ func init() {
 // @param name redis配置名
 // @return redis.Conn
 func GetRedisPool(name string) *redis.Pool {
-	key := config.RedisConnPrefix + name
+	key := fmt.Sprintf("%s.%s", RedisConnPrefix, name)
 
 	if conn, ok := cachePool[key]; ok {
 		return conn
 	}
 
-	var conf config.RedisConfig
+	var conf RedisConfig
 	if err := viper.UnmarshalKey(key, &conf); err != nil {
 		zap.S().Panicf("连接redis失败, 检查%s的配置, err: %s", key, err)
 	}
@@ -41,7 +40,7 @@ func GetRedisPool(name string) *redis.Pool {
 	return pool
 }
 
-func connectRedigoPool(conf config.RedisConfig) (*redis.Pool, error) {
+func connectRedigoPool(conf RedisConfig) (*redis.Pool, error) {
 	pool := redis.Pool{
 		Dial: func() (redis.Conn, error) {
 			c, err := redis.Dial(conf.Network, fmt.Sprintf("%s:%d", conf.Host, conf.Port))
