@@ -12,20 +12,31 @@ import (
 	"time"
 )
 
+// NewLogger 创建日志新句柄
+// @param name 日志标识，用来区分多个日志，传空则为default日志文件
+// @return *zap.Logger
 func NewLogger(name string) *zap.Logger {
 	if name == "" {
-		name = "default"
+		name = bizDefaultLogName
 	}
 
 	zapConf := ZapConf{
+		ServerName:   conf.ServerName,
 		Path:         conf.Path,
 		Name:         name,
 		JsonFormat:   true,
 		RotationTime: 24,
 		MaxAge:       conf.BizMaxAge,
-		MinLevel:     parseLevel(conf.MinLevel),
+		LowLevel:     parseLevel(conf.LowLevel),
 		HighLevel:    zapcore.FatalLevel,
 	}
+
+	// 请求日志特殊处理
+	if name == RequestLogName {
+		zapConf.MaxAge = conf.CallMaxAge
+	}
+
+	// 绑定服务名和服务环境
 	if err := viper.UnmarshalKey("server.name", &zapConf.ServerName); err != nil {
 		panic(fmt.Sprintf("new logger err: %s", err))
 	}
@@ -51,7 +62,7 @@ func NewLogger(name string) *zap.Logger {
 // @return error
 func newCore(conf ZapConf) (zapcore.Core, error) {
 	priority := zap.LevelEnablerFunc(func(lev zapcore.Level) bool {
-		return lev >= conf.MinLevel && lev <= conf.HighLevel
+		return lev >= conf.LowLevel && lev <= conf.HighLevel
 	})
 
 	writer, err := getWriter(conf.Path, conf.Name, conf.RotationTime, conf.MaxAge)
@@ -114,7 +125,7 @@ func getWriter(dir, name string, rotationTime, maxAge time.Duration) (io.Writer,
 
 	writer, err := rotatelogs.New(
 		file,
-		rotatelogs.WithLinkName(dir + "/." + name),
+		rotatelogs.WithLinkName(dir+"/."+name),
 		rotatelogs.WithMaxAge(time.Hour*24*maxAge),
 		rotatelogs.WithRotationTime(time.Hour*rotationTime),
 	)
@@ -125,4 +136,3 @@ func getWriter(dir, name string, rotationTime, maxAge time.Duration) (io.Writer,
 
 	return writer, nil
 }
-

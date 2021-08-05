@@ -17,7 +17,7 @@ func Init() {
 		panic(fmt.Sprintf("获取日志配置错误: %v", err))
 	}
 
-	requestLogger = NewLogger("request")
+	requestLogger = NewLogger(RequestLogName)
 	if requestLogger == nil {
 		panic("创建请求日志失败")
 	}
