@@ -65,7 +65,7 @@ func newCore(conf ZapConf) (zapcore.Core, error) {
 		return lev >= conf.LowLevel && lev <= conf.HighLevel
 	})
 
-	writer, err := getWriter(conf.Path, conf.Name, conf.RotationTime, conf.MaxAge)
+	writer, err := getWriter(conf.Path, "biz-" + conf.Name, conf.RotationTime, conf.MaxAge)
 	if err != nil {
 		return nil, err
 	}
