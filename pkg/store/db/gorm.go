@@ -17,10 +17,10 @@ func init() {
 	dbPool = make(map[string]*gorm.DB, 0)
 }
 
-// GetGormDB 获取gorm连接句柄
+// ConnectGorm 连接Mysql，获取gorm连接句柄
 // @param name 数据库配置名
 // @return *gorm.DB
-func GetGormDB(name string) *gorm.DB {
+func ConnectGorm(name string) *gorm.DB {
 	key := fmt.Sprintf("%s.%s", MysqlDBPrefix, name)
 
 	if db, ok := dbPool[key]; ok {
@@ -32,7 +32,7 @@ func GetGormDB(name string) *gorm.DB {
 		zap.S().Panicf("连接数据库失败, 检查%s的配置, err: %s", key, err)
 	}
 
-	db, err := ConnectGorm(dbConfig)
+	db, err := ConnectGormByConf(dbConfig)
 	if err != nil {
 		zap.S().Panicf("连接数据库失败, 检查%s的配置, err: %s", key, err)
 	}
@@ -42,11 +42,11 @@ func GetGormDB(name string) *gorm.DB {
 	return db
 }
 
-// ConnectGorm 连接数据库
+// ConnectGormByConf 连接数据库
 // @param conf 连接配置信息
 // @return *gorm.DB
 // @return error
-func ConnectGorm(conf MysqlConf) (*gorm.DB, error) {
+func ConnectGormByConf(conf MysqlConf) (*gorm.DB, error) {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s", conf.User, conf.Password, conf.Host, conf.Port, conf.Database)
 	if conf.Params != "" {
 		dsn = fmt.Sprintf("%s?%s", dsn, conf.Params)

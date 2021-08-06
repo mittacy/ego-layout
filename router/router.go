@@ -12,7 +12,7 @@ import (
 
 func InitRouter(r *gin.Engine) {
 	// 1. 初始化控制器
-	userApi := InitUserApi(db.GetGormDB("MYSQLKEY"), cache.GetRedisPool("REDISKEY"))
+	userApi := InitUserApi(db.ConnectGorm("MYSQLKEY"), cache.GetRedisPool("REDISKEY"))
 
 	// 2. 全局中间件
 	r.Use(ginzap.Ginzap(logger.GetRequestLogger(), time.RFC3339, true))

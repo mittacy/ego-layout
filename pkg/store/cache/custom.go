@@ -15,21 +15,21 @@ type CustomRedis struct {
 	expireRange    ExpireRange // 缓存有效期范围
 }
 
-// GetCustomRedisByConf 获取 CustomRedis 连接
+// ConnRedis 获取 CustomRedis 连接
 // @param name redis配置名
-// @param apiName
+// @param apiName 区分各个api缓存，防止缓存冲突
 // @return CustomRedigo
-func GetCustomRedisByConf(name, apiName string) CustomRedis {
-	pool := GetRedisPool(name)
+func ConnRedis(name, apiName string) CustomRedis {
+	pool := ConnRedigo(name)
 
-	return GetCustomRedisByPool(pool, apiName)
+	return ConnRedisByPool(pool, apiName)
 }
 
-// GetCustomRedisByPool 获取 CustomRedis 连接
+// ConnRedisByPool 获取 CustomRedis 连接
 // @param conn redis.Conn连接句柄
 // @param apiName api名字，用户区分各个api类型的缓存，防止缓存键冲突
 // @return CustomRedigo
-func GetCustomRedisByPool(pool *redis.Pool, apiName string) CustomRedis {
+func ConnRedisByPool(pool *redis.Pool, apiName string) CustomRedis {
 	if _, err := pool.Get().Do("ping"); err != nil {
 		zap.S().Panicf("连接redis失败, 检查redis配置, err: %s", err)
 	}
