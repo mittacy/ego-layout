@@ -9,13 +9,13 @@ import (
 	"gorm.io/gorm"
 )
 
+// 实现service层中的data接口
+
 type User struct {
 	db     *gorm.DB
 	cache  cache.CustomRedis
 	logger *logger.CustomLogger
 }
-
-// 实现service层中的各个data接口的构建方法
 
 func NewUser(db *gorm.DB, cacheConn *redis.Pool, logger *logger.CustomLogger) service.IUserService {
 	c := cache.ConnRedisByPool(cacheConn, "user")
@@ -60,7 +60,6 @@ func (ctl *User) Select(id int64) (*model.User, error) {
 }
 
 func (ctl *User) List(fields []string, page, pageSize int) ([]model.User, error) {
-	ctl.logger.Info("this is data")
 	// 操作缓存和数据库
 
 	users := []model.User{

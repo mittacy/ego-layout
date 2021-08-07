@@ -61,7 +61,6 @@ func (ctl *User) GetReply(c *gin.Context, data *model.User) {
 // @param data 数据库列表数据
 // @param totalSize 记录总数
 func (ctl *User) ListReply(c *gin.Context, data []model.User, totalSize int64) {
-	ctl.logger.Info("this is transform")
 	list, err := ctl.UsersPack(data)
 	if err != nil {
 		ctl.logger.CopierErrLog(err)

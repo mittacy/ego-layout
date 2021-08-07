@@ -249,7 +249,6 @@ func (ctl *User) List(c *gin.Context) {
 		return
 	}
 
-	ctl.logger.Info("this is api")
 	user, totalSize, err := ctl.userService.List(req.Page, req.PageSize)
 	if err != nil {
 		response.CheckErrAndLog(c, ctl.logger, "user list", err)
