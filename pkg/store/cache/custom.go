@@ -15,12 +15,12 @@ type CustomRedis struct {
 	expireRange    ExpireRange // 缓存有效期范围
 }
 
-// ConnRedis 获取 CustomRedis 连接
+// ConnCustomRedis 获取 CustomRedis 连接
 // @param name redis配置名
 // @param apiName 区分各个api缓存，防止缓存冲突
 // @return CustomRedigo
-func ConnRedis(name, apiName string) CustomRedis {
-	pool := ConnRedigo(name)
+func ConnCustomRedis(name, apiName string) CustomRedis {
+	pool := ConnRedis(name)
 
 	return ConnRedisByPool(pool, apiName)
 }

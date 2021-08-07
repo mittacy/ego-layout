@@ -3,17 +3,20 @@ package service
 import (
 	"github.com/mittacy/ego-layout/app/api"
 	"github.com/mittacy/ego-layout/app/model"
+	"github.com/mittacy/ego-layout/pkg/logger"
 )
 
 type User struct {
 	userService IUserService
+	logger      *logger.CustomLogger
 }
 
 // 实现api层中的各个service接口的构建方法
 
-func NewUser(userService IUserService) api.IUserService {
+func NewUser(userService IUserService, logger *logger.CustomLogger) api.IUserService {
 	return &User{
 		userService: userService,
+		logger:      logger,
 	}
 }
 
@@ -59,6 +62,7 @@ func (ctl *User) Get(id int64) (*model.User, error) {
 }
 
 func (ctl *User) List(page, pageSize int) ([]model.User, int64, error) {
+	ctl.logger.Info("this is service")
 	fields := []string{"id", "name", "created_at", "updated_at"}
 
 	list, err := ctl.userService.List(fields, page, pageSize)

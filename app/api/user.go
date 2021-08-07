@@ -5,17 +5,24 @@ import (
 	"github.com/gin-gonic/gin/binding"
 	"github.com/jinzhu/copier"
 	"github.com/mittacy/ego-layout/app/model"
-	"github.com/mittacy/ego-layout/app/transform/userTransform"
+	"github.com/mittacy/ego-layout/app/transform"
 	"github.com/mittacy/ego-layout/app/validator/userValidator"
+	"github.com/mittacy/ego-layout/pkg/logger"
 	"github.com/mittacy/ego-layout/pkg/response"
 )
 
 type User struct {
 	userService IUserService
+	transform   transform.User
+	logger      *logger.CustomLogger
 }
 
-func NewUser(userService IUserService) User {
-	return User{userService: userService}
+func NewUser(userService IUserService, logger *logger.CustomLogger) User {
+	return User{
+		transform:   transform.NewUser(logger),
+		userService: userService,
+		logger:      logger,
+	}
 }
 
 type IUserService interface {
@@ -52,19 +59,19 @@ type IUserService interface {
 func (ctl *User) Create(c *gin.Context) {
 	req := userValidator.CreateReq{}
 	if err := c.ShouldBindJSON(&req); err != nil {
-		response.ValidateErrAndLog(c, err)
+		response.ValidateErr(c, err)
 		return
 	}
 
 	user := model.User{}
 	if err := copier.Copy(&user, &req); err != nil {
-		response.CopierErrAndLog(c, err)
+		response.CopierErrAndLog(c, ctl.logger, err)
 		return
 	}
 
 	id, err := ctl.userService.Create(user)
 	if err != nil {
-		response.CheckErrAndLog(c, "create user", err)
+		response.CheckErrAndLog(c, ctl.logger, "create user", err)
 		return
 	}
 
@@ -93,12 +100,12 @@ func (ctl *User) Create(c *gin.Context) {
 func (ctl *User) Delete(c *gin.Context) {
 	req := userValidator.DeleteReq{}
 	if err := c.ShouldBindJSON(&req); err != nil {
-		response.ValidateErrAndLog(c, err)
+		response.ValidateErr(c, err)
 		return
 	}
 
 	if err := ctl.userService.Delete(req.Id); err != nil {
-		response.CheckErrAndLog(c, "delete user", err)
+		response.CheckErrAndLog(c, ctl.logger, "delete user", err)
 		return
 	}
 
@@ -128,7 +135,7 @@ func (ctl *User) Delete(c *gin.Context) {
 func (ctl *User) Update(c *gin.Context) {
 	req := userValidator.UpdateReq{}
 	if err := c.ShouldBindBodyWith(&req, binding.JSON); err != nil {
-		response.ValidateErrAndLog(c, err)
+		response.ValidateErr(c, err)
 		return
 	}
 
@@ -184,17 +191,17 @@ func (ctl *User) Update(c *gin.Context) {
 func (ctl *User) Get(c *gin.Context) {
 	req := userValidator.GetReq{}
 	if err := c.ShouldBindQuery(&req); err != nil {
-		response.ValidateErrAndLog(c, err)
+		response.ValidateErr(c, err)
 		return
 	}
 
 	user, err := ctl.userService.Get(req.Id)
 	if err != nil {
-		response.CheckErrAndLog(c, "get user", err)
+		response.CheckErrAndLog(c, ctl.logger, "get user", err)
 		return
 	}
 
-	userTransform.UserToReply(c, user)
+	ctl.transform.GetReply(c, user)
 }
 
 /**
@@ -238,34 +245,35 @@ func (ctl *User) Get(c *gin.Context) {
 func (ctl *User) List(c *gin.Context) {
 	req := userValidator.ListReq{}
 	if err := c.ShouldBindQuery(&req); err != nil {
-		response.ValidateErrAndLog(c, err)
+		response.ValidateErr(c, err)
 		return
 	}
 
+	ctl.logger.Info("this is api")
 	user, totalSize, err := ctl.userService.List(req.Page, req.PageSize)
 	if err != nil {
-		response.CheckErrAndLog(c, "user list", err)
+		response.CheckErrAndLog(c, ctl.logger, "user list", err)
 		return
 	}
 
-	userTransform.UsersToReply(c, user, totalSize)
+	ctl.transform.ListReply(c, user, totalSize)
 }
 
 func (ctl *User) updateInfo(c *gin.Context) {
 	req := userValidator.UpdateInfoReq{}
 	if err := c.ShouldBindBodyWith(&req, binding.JSON); err != nil {
-		response.ValidateErrAndLog(c, err)
+		response.ValidateErr(c, err)
 		return
 	}
 
 	user := model.User{}
 	if err := copier.Copy(&user, &req); err != nil {
-		response.CopierErrAndLog(c, err)
+		response.CopierErrAndLog(c, ctl.logger, err)
 		return
 	}
 
 	if err := ctl.userService.UpdateInfo(user); err != nil {
-		response.CheckErrAndLog(c, "update user info", err)
+		response.CheckErrAndLog(c, ctl.logger, "update user info", err)
 		return
 	}
 
@@ -276,12 +284,12 @@ func (ctl *User) updateInfo(c *gin.Context) {
 func (ctl *User) updatePassword(c *gin.Context) {
 	req := userValidator.UpdatePasswordReq{}
 	if err := c.ShouldBindBodyWith(&req, binding.JSON); err != nil {
-		response.ValidateErrAndLog(c, err)
+		response.ValidateErr(c, err)
 		return
 	}
 
 	if err := ctl.userService.UpdatePassword(req.Id, req.Password); err != nil {
-		response.CheckErrAndLog(c, "update user name", err)
+		response.CheckErrAndLog(c, ctl.logger, "update user name", err)
 		return
 	}
 

@@ -1,18 +1,27 @@
-package userTransform
+package transform
 
 import (
-	"github.com/mittacy/ego-layout/app/model"
-	"github.com/mittacy/ego-layout/app/validator/userValidator"
-	"github.com/mittacy/ego-layout/pkg/response"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
+	"github.com/mittacy/ego-layout/app/model"
+	"github.com/mittacy/ego-layout/app/validator/userValidator"
+	"github.com/mittacy/ego-layout/pkg/logger"
+	"github.com/mittacy/ego-layout/pkg/response"
 )
+
+type User struct {
+	logger *logger.CustomLogger
+}
+
+func NewUser(customLogger *logger.CustomLogger) User {
+	return User{logger: customLogger}
+}
 
 // UserPack 数据库数据转化为响应数据
 // @param data 数据库数据
 // @return reply 响应体数据
 // @return err
-func UserPack(data *model.User) (*userValidator.GetReply, error) {
+func (ctl *User) UserPack(data *model.User) (*userValidator.GetReply, error) {
 	reply := userValidator.GetReply{}
 
 	if err := copier.Copy(&reply, data); err != nil {
@@ -26,17 +35,18 @@ func UserPack(data *model.User) (*userValidator.GetReply, error) {
 // @param data 数据库数据
 // @return reply 响应体数据
 // @return err
-func UsersPack(data []model.User) (reply []userValidator.ListReply, err error) {
+func (ctl *User) UsersPack(data []model.User) (reply []userValidator.ListReply, err error) {
 	err = copier.Copy(&reply, &data)
 	return
 }
 
-// UserToReply 详情响应包装
+// GetReply 详情响应包装
 // @param data 数据库数据
-func UserToReply(c *gin.Context, data *model.User) {
-	reply, err := UserPack(data)
+func (ctl *User) GetReply(c *gin.Context, data *model.User) {
+	reply, err := ctl.UserPack(data)
 	if err != nil {
-		response.CopierErrAndLog(c, err)
+		ctl.logger.CopierErrLog(err)
+		response.Unknown(c)
 		return
 	}
 
@@ -47,13 +57,15 @@ func UserToReply(c *gin.Context, data *model.User) {
 	response.Success(c, res)
 }
 
-// UsersToReply 列表响应包装
+// ListReply 列表响应包装
 // @param data 数据库列表数据
 // @param totalSize 记录总数
-func UsersToReply(c *gin.Context, data []model.User, totalSize int64) {
-	list, err := UsersPack(data)
+func (ctl *User) ListReply(c *gin.Context, data []model.User, totalSize int64) {
+	ctl.logger.Info("this is transform")
+	list, err := ctl.UsersPack(data)
 	if err != nil {
-		response.CopierErrAndLog(c, err)
+		ctl.logger.CopierErrLog(err)
+		response.Unknown(c)
 		return
 	}
 

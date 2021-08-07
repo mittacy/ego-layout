@@ -30,7 +30,7 @@ type UpdatePasswordReq struct {
 type UpdatePasswordReply struct{}
 
 type GetReq struct {
-	Id int64 `form:"id" binding:"required,min=1"`
+	Id int64 `form:"id" json:"id" binding:"required,min=1"`
 }
 type GetReply struct {
 	Id        int64  `json:"id"`
@@ -41,8 +41,8 @@ type GetReply struct {
 }
 
 type ListReq struct {
-	Page     int `json:"page" binding:"required,min=1"`
-	PageSize int `json:"page_size" binding:"required,min=1,max=50"`
+	Page     int `form:"page" json:"page" binding:"required,min=1"`
+	PageSize int `form:"page_size" json:"page_size" binding:"required,min=1,max=50"`
 }
 type ListReply struct {
 	Id        int64  `json:"id"`

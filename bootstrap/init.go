@@ -29,6 +29,6 @@ func Init() {
 	cache.Init()
 
 	// 5. 初始化token
-	tokenCache := cache.GetCustomRedisByConf("REDISKEY", "token")
+	tokenCache := cache.ConnCustomRedis("REDISKEY", "token")
 	jwt.InitToken(tokenCache)
 }

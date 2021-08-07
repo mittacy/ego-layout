@@ -16,10 +16,10 @@ func init() {
 	cachePool = make(map[string]*redis.Pool, 0)
 }
 
-// ConnRedigo 获取 redis 连接池
+// ConnRedis 获取 redis 连接池
 // @param name redis配置名
 // @return redis.Conn
-func ConnRedigo(name string) *redis.Pool {
+func ConnRedis(name string) *redis.Pool {
 	key := fmt.Sprintf("%s.%s", RedisConnPrefix, name)
 
 	if conn, ok := cachePool[key]; ok {
@@ -31,7 +31,7 @@ func ConnRedigo(name string) *redis.Pool {
 		zap.S().Panicf("连接redis失败, 检查%s的配置, err: %s", key, err)
 	}
 
-	pool, err := connectRedigo(conf)
+	pool, err := connectRedisPool(conf)
 	if err != nil {
 		zap.S().Panicf("连接redis失败, 检查%s的配置, err: %s", key, err)
 	}
@@ -40,7 +40,7 @@ func ConnRedigo(name string) *redis.Pool {
 	return pool
 }
 
-func connectRedigo(conf RedisConfig) (*redis.Pool, error) {
+func connectRedisPool(conf RedisConfig) (*redis.Pool, error) {
 	pool := redis.Pool{
 		Dial: func() (redis.Conn, error) {
 			c, err := redis.Dial(conf.Network, fmt.Sprintf("%s:%d", conf.Host, conf.Port))

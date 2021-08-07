@@ -2,10 +2,10 @@ package response
 
 import (
 	"errors"
-	"github.com/mittacy/ego-layout/pkg/checker"
-	"github.com/mittacy/ego-layout/pkg/logger"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"github.com/mittacy/ego-layout/pkg/checker"
+	"github.com/mittacy/ego-layout/pkg/logger"
 	"net/http"
 	"strings"
 )
@@ -13,7 +13,7 @@ import (
 // TransformErrAndLog 响应包装错误响应，同时会自动记录日志
 // @param c
 // @param err
-func TransformErrAndLog(c *gin.Context, err error) {
+func TransformErrAndLog(c *gin.Context, logger *logger.CustomLogger, err error) {
 	logger.TransformErrLog(err)
 	Unknown(c)
 }
@@ -21,7 +21,7 @@ func TransformErrAndLog(c *gin.Context, err error) {
 // CopierErrAndLog copier结构体转化错误响应，同时会自动记录日志
 // @param c
 // @param err
-func CopierErrAndLog(c *gin.Context, err error) {
+func CopierErrAndLog(c *gin.Context, logger *logger.CustomLogger, err error) {
 	logger.CopierErrLog(err)
 	Unknown(c)
 }
@@ -29,7 +29,7 @@ func CopierErrAndLog(c *gin.Context, err error) {
 // JsonMarshalErrAndLog json序列化错误响应，同时会自动记录错误日志
 // @param c
 // @param err
-func JsonMarshalErrAndLog(c *gin.Context, err error) {
+func JsonMarshalErrAndLog(c *gin.Context, logger *logger.CustomLogger, err error) {
 	logger.JsonMarshalErrLog(err)
 	Unknown(c)
 }
@@ -40,7 +40,7 @@ func JsonMarshalErrAndLog(c *gin.Context, err error) {
 // targetErr 可能的业务错误
 // - 如果是这些错误，将响应错误的提示信息
 // - 如果不是这些错误，将记录日志并响应未知错误
-func CheckErrAndLog(c *gin.Context, title string, sourceErr error, targetErr ...error) {
+func CheckErrAndLog(c *gin.Context, logger *logger.CustomLogger, title string, sourceErr error, targetErr ...error) {
 	if isErr(sourceErr, targetErr...) {
 		FailErr(c, sourceErr)
 		return
@@ -51,10 +51,10 @@ func CheckErrAndLog(c *gin.Context, title string, sourceErr error, targetErr ...
 	return
 }
 
-// ValidateErrAndLog 表单解析错误响应，记录日志并响应
+// ValidateErr 表单解析错误响应，记录日志并响应
 // err 错误
 // title 日志标记信息
-func ValidateErrAndLog(c *gin.Context, err error) {
+func ValidateErr(c *gin.Context, err error) {
 	errs, ok := err.(validator.ValidationErrors)
 	if !ok {
 		// 非validator错误
