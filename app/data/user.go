@@ -17,7 +17,7 @@ type User struct {
 	logger *logger.CustomLogger
 }
 
-func NewUser(db *gorm.DB, cacheConn *redis.Pool, logger *logger.CustomLogger) service.IUserService {
+func NewUser(db *gorm.DB, cacheConn *redis.Pool, logger *logger.CustomLogger) service.IUserData {
 	c := cache.ConnRedisByPool(cacheConn, "user")
 
 	return &User{
