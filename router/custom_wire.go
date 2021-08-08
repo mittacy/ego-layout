@@ -11,8 +11,8 @@ import (
 
 func InitUserApi(db *gorm.DB, cache *redis.Pool) api.User {
 	customLogger := logger.NewCustomLogger("user")
-	iUserService := data.NewUser(db, cache, customLogger)
-	apiIUserService := service.NewUser(iUserService, customLogger)
-	user := api.NewUser(apiIUserService, customLogger)
-	return user
+	userData := data.NewUser(db, cache, customLogger)
+	userService := service.NewUser(userData, customLogger)
+	userApi := api.NewUser(userService, customLogger)
+	return userApi
 }
