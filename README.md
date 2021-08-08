@@ -41,34 +41,32 @@ docs：https://app.gitbook.com/@mittacychen/s/ego
 ├── pkg                     # 各种工具封装
 │   ├── checker             # 校验器封装
 │   │   └── validator.go
-│   ├── config              # 配置全局初始化、配置结构
-│   │   ├── init.go
-│   │   ├── jwt.go
-│   │   ├── log.go
-│   │   ├── mysql.go
-│   │   ├── redis.go
-│   │   └── server.go
+│   ├── config				# 配置全局初始化、配置结构
+│   │   ├── init.go
 │   ├── jwt
 │   │   └── token.go
-│   ├── logger              # 日志封装
-│   │   ├── init.go
-│   │   └── utils.go
-│   ├── response            # 响应封装
-│   │   ├── log.go
-│   │   └── response.go
-│   └── store               # 持久化、缓存封装
-│       ├── cache
-│       │   ├── custom.go
-│       │   └── redigo.go
-│       └── db
-│           └── gorm.go
+│   ├── logger				# 日志封装
+│   │   ├── init.go
+│   │   ├── mylogger.go
+│   │   ├── struct.go
+│   │   └── zap.go
+│   ├── response			# 响应封装
+│   │   ├── response.go
+│   │   └── utils.go
+│   └── store
+│       ├── cache			# 缓存封装
+│       │   ├── config.go
+│       │   ├── custom.go
+│       │   └── redigo.go
+│       └── db				# 持久化封装
+│           ├── config.go
+│           └── gorm.go
 ├── app
 │   ├── validator           # 数据请求、响应结构体定义以及参数校验
 │   │   └── userValidator
 │   │       └── user.go
-│   ├── transform           # 响应数据处理、封装
-│   │   └── userTransform
-|   |        └── user.go
+│   ├── transform			# 响应数据处理、封装
+│   │   └── user.go
 │   ├── api                 # api控制器，这里只进行请求解析、service编排与调用
 │   │   └── user.go
 │   ├── service             # 服务层，处理逻辑，实现api中各个服务接口
@@ -79,10 +77,11 @@ docs：https://app.gitbook.com/@mittacychen/s/ego
 │       └── user.go
 ├── middleware              # 中间件
 │   └── core.go
-├── router                  # 路由初始化
-│   ├── router.go
-│   ├── wire.go             # 依赖注入，生成各种api控制器创建函数
-│   └── wire_gen.go
+├── router
+│   ├── custom_wire.go		# ego生成的api控制器创建函数，自定义控制器创建函数也写在这里
+│   ├── router.go			# 路由初始化
+│   ├── wire.go				# 依赖注入，生成各种api控制器创建函数
+│   └── wire_gen.go
 └── utils                   # 工具封装
 │   └── err.go
 ├── logs                    # 日志文件目录
