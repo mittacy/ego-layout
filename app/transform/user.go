@@ -45,8 +45,7 @@ func (ctl *User) UsersPack(data []model.User) (reply []userValidator.ListReply, 
 func (ctl *User) GetReply(c *gin.Context, data *model.User) {
 	reply, err := ctl.UserPack(data)
 	if err != nil {
-		ctl.logger.CopierErrLog(err)
-		response.Unknown(c)
+		response.CopierErrAndLog(c, ctl.logger, err)
 		return
 	}
 
@@ -63,8 +62,7 @@ func (ctl *User) GetReply(c *gin.Context, data *model.User) {
 func (ctl *User) ListReply(c *gin.Context, data []model.User, totalSize int64) {
 	list, err := ctl.UsersPack(data)
 	if err != nil {
-		ctl.logger.CopierErrLog(err)
-		response.Unknown(c)
+		response.CopierErrAndLog(c, ctl.logger, err)
 		return
 	}
 
