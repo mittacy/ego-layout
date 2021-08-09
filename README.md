@@ -121,3 +121,22 @@ $ go run main.go -config default.yaml
 
 > -config 参数，配置文件路径，默认为 `default.yaml`
 
+### 4. 生成业务框架代码
+
+```shell
+# 安装 ego 工具
+$ go get -u github.com/mittacy/ego@latest
+
+# 进入项目根目录
+$ cd project
+
+# 创建 api、validator、transform、service、data、model、wire 代码模板
+$ ego tpl api article
+
+# 创建 service、data、model 代码模板
+$ ego tpl service article
+
+# 创建 data、model 代码模板
+$ ego tpl data article
+```
+
