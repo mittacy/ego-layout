@@ -2,7 +2,7 @@ package jwt
 
 import (
 	"fmt"
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt"
 	"github.com/mittacy/ego-layout/pkg/store/cache"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
@@ -23,7 +23,7 @@ type token struct {
 
 type TokenData struct {
 	UserId int64 `json:"userId"`
-	Role   int `json:"role"`
+	Role   int   `json:"role"`
 	jwt.StandardClaims
 }
 
@@ -51,8 +51,8 @@ func NewToken(expire time.Duration, customRedis cache.CustomRedis) *token {
 	}
 
 	return &token{
-		Expire: expire,
-		Cache: customRedis,
+		Expire:    expire,
+		Cache:     customRedis,
 		BlackName: fmt.Sprintf("%s:token:blacklist", serverName),
 	}
 }
