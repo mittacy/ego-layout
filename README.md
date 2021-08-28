@@ -22,9 +22,7 @@ docs：https://app.gitbook.com/@mittacychen/s/ego
     2. 调用 service 服务，获得返回结果；
     3. 调用 transform 对响应数据进行处理，然后响应给前端
 
-- service 层：实现 api 层定义的 service 接口，一个 service 结构体可以实现多个 api 层定义的服务接口
-
-    service 包含一个或多个 data 接口，相关的数据操作应该放在同一个 data 接口中
+- service 层：service 包含一个或多个 data 接口，相关的数据操作应该放在同一个 data 接口中
 
 - data 层：实现 service 层定义的 data 接口，一个 data 结构体可以实现多个 service 层定义的 data 接口
 
@@ -69,7 +67,7 @@ docs：https://app.gitbook.com/@mittacychen/s/ego
 │   │   └── user.go
 │   ├── api                 # api控制器，这里只进行请求解析、service编排与调用
 │   │   └── user.go
-│   ├── service             # 服务层，处理逻辑，实现api中各个服务接口
+│   ├── service             # 服务层，处理逻辑
 │   │   └── user.go
 │   ├── data                # 数据存储层，实现service中各个data接口
 │   │   └── user.go
@@ -78,10 +76,8 @@ docs：https://app.gitbook.com/@mittacychen/s/ego
 ├── middleware              # 中间件
 │   └── core.go
 ├── router
-│   ├── custom_wire.go		# ego生成的api控制器创建函数，自定义控制器创建函数也写在这里
+│   ├── api.go				# ego生成的api控制器初始化函数
 │   ├── router.go			# 路由初始化
-│   ├── wire.go				# 依赖注入，生成各种api控制器创建函数
-│   └── wire_gen.go
 └── utils                   # 工具封装
 │   └── err.go
 ├── logs                    # 日志文件目录
@@ -130,7 +126,7 @@ $ go get -u github.com/mittacy/ego@latest
 # 进入项目根目录
 $ cd project
 
-# 创建 api、validator、transform、service、data、model、wire 代码模板
+# 创建 api、validator、transform、service、data、model 代码模板
 $ ego tpl api article
 
 # 创建 service、data、model 代码模板
