@@ -5,14 +5,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/mittacy/ego-layout/pkg/config"
 	"github.com/mittacy/ego-layout/pkg/logger"
-	"github.com/mittacy/ego-layout/pkg/store/cache"
-	"github.com/mittacy/ego-layout/pkg/store/db"
 	"time"
 )
 
 func InitRouter(r *gin.Engine) {
 	// 1. 初始化控制器
-	userApi := InitUserApi(db.ConnectGorm("MYSQLKEY"), cache.ConnRedis("REDISKEY"))
+	InitApi()
 
 	// 2. 全局中间件
 	r.Use(ginzap.Ginzap(logger.GetRequestLogger(), time.RFC3339, true))

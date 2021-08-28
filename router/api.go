@@ -6,8 +6,18 @@ import (
 	"github.com/mittacy/ego-layout/app/data"
 	"github.com/mittacy/ego-layout/app/service"
 	"github.com/mittacy/ego-layout/pkg/logger"
+	"github.com/mittacy/ego-layout/pkg/store/cache"
+	"github.com/mittacy/ego-layout/pkg/store/db"
 	"gorm.io/gorm"
 )
+
+var (
+	userApi api.User
+)
+
+func InitApi() {
+	userApi = InitUserApi(db.ConnectGorm("MYSQLKEY"), cache.ConnRedis("REDISKEY"))
+}
 
 func InitUserApi(db *gorm.DB, cache *redis.Pool) api.User {
 	customLogger := logger.NewCustomLogger("user")
