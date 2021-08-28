@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin/binding"
 	"github.com/jinzhu/copier"
 	"github.com/mittacy/ego-layout/app/model"
+	"github.com/mittacy/ego-layout/app/service"
 	"github.com/mittacy/ego-layout/app/transform"
 	"github.com/mittacy/ego-layout/app/validator/userValidator"
 	"github.com/mittacy/ego-layout/pkg/logger"
@@ -12,26 +13,17 @@ import (
 )
 
 type User struct {
-	userService IUserService
+	userService service.User
 	transform   transform.User
 	logger      *logger.CustomLogger
 }
 
-func NewUser(userService IUserService, logger *logger.CustomLogger) User {
+func NewUser(userService service.User, logger *logger.CustomLogger) User {
 	return User{
 		transform:   transform.NewUser(logger),
 		userService: userService,
 		logger:      logger,
 	}
-}
-
-type IUserService interface {
-	Create(user model.User) (int64, error)
-	Delete(id int64) error
-	UpdateInfo(user model.User) error
-	UpdatePassword(id int64, name string) error
-	Get(id int64) (*model.User, error)
-	List(page, pageSize int) ([]model.User, int64, error)
 }
 
 /**

@@ -1,20 +1,17 @@
 package service
 
 import (
-	"github.com/mittacy/ego-layout/app/api"
 	"github.com/mittacy/ego-layout/app/model"
 	"github.com/mittacy/ego-layout/pkg/logger"
 )
-
-// 实现api层中的service接口
 
 type User struct {
 	userData IUserData
 	logger   *logger.CustomLogger
 }
 
-func NewUser(userData IUserData, logger *logger.CustomLogger) api.IUserService {
-	return &User{
+func NewUser(userData IUserData, logger *logger.CustomLogger) User {
+	return User{
 		userData: userData,
 		logger:   logger,
 	}
