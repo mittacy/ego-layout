@@ -2,7 +2,7 @@
 
 docs：https://app.gitbook.com/@mittacychen/s/ego
 
-本项目是对 Gin 的二次封装，便于快速开发业务服务
+ego 是对 Gin 的二次封装，便于快速开发业务服务
 
 > 1. 这是一个基于 Go 语言、Gin 框架的 Web 项目骨架，对常用的库进行封装，开发者可以更快速搭建 Web 服务，更关注属于自己的业务
 > 2. 项目要求 Go 版本 >= 1.15
