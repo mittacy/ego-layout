@@ -5,15 +5,15 @@ import (
 	"github.com/jinzhu/copier"
 	"github.com/mittacy/ego-layout/app/model"
 	"github.com/mittacy/ego-layout/app/validator/userValidator"
-	"github.com/mittacy/ego-layout/pkg/logger"
+	"github.com/mittacy/ego-layout/pkg/log"
 	"github.com/mittacy/ego-layout/pkg/response"
 )
 
 type User struct {
-	logger *logger.CustomLogger
+	logger *log.Logger
 }
 
-func NewUser(customLogger *logger.CustomLogger) User {
+func NewUser(customLogger *log.Logger) User {
 	return User{logger: customLogger}
 }
 

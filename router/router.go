@@ -4,7 +4,7 @@ import (
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 	"github.com/mittacy/ego-layout/pkg/config"
-	"github.com/mittacy/ego-layout/pkg/logger"
+	"github.com/mittacy/ego-layout/pkg/log"
 	"time"
 )
 
@@ -13,8 +13,9 @@ func InitRouter(r *gin.Engine) {
 	InitApi()
 
 	// 2. 全局中间件
-	r.Use(ginzap.Ginzap(logger.GetRequestLogger(), time.RFC3339, true))
-	r.Use(ginzap.RecoveryWithZap(logger.GetRequestLogger(), true))
+	requestLog := log.New("request")
+	r.Use(ginzap.Ginzap(requestLog.GetZap(), time.RFC3339, true))
+	r.Use(ginzap.RecoveryWithZap(requestLog.GetZap(), true))
 	//r.Use(middleware.CorsMiddleware())
 
 	// 3. 初始化路由

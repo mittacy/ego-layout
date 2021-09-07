@@ -8,17 +8,17 @@ import (
 	"github.com/mittacy/ego-layout/app/service"
 	"github.com/mittacy/ego-layout/app/transform"
 	"github.com/mittacy/ego-layout/app/validator/userValidator"
-	"github.com/mittacy/ego-layout/pkg/logger"
+	"github.com/mittacy/ego-layout/pkg/log"
 	"github.com/mittacy/ego-layout/pkg/response"
 )
 
 type User struct {
 	userService service.User
 	transform   transform.User
-	logger      *logger.CustomLogger
+	logger      *log.Logger
 }
 
-func NewUser(userService service.User, logger *logger.CustomLogger) User {
+func NewUser(userService service.User, logger *log.Logger) User {
 	return User{
 		transform:   transform.NewUser(logger),
 		userService: userService,

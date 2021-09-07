@@ -4,8 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/mittacy/ego-layout/bootstrap"
 	"github.com/mittacy/ego-layout/pkg/config"
+	"github.com/mittacy/ego-layout/pkg/log"
 	"github.com/mittacy/ego-layout/router"
-	"go.uber.org/zap"
 	"net/http"
 	"strconv"
 	"time"
@@ -16,6 +16,8 @@ func init() {
 }
 
 func main() {
+	defer log.Sync()
+
 	r := gin.New()
 
 	// 初始化路由
@@ -30,7 +32,7 @@ func main() {
 		MaxHeaderBytes: 1 << 20,
 	}
 
-	zap.S().Infof("监听端口:%d", serverConfig.Port)
+	log.Infof("监听端口:%d", serverConfig.Port)
 
 	s.ListenAndServe()
 }

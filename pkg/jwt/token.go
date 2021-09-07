@@ -3,10 +3,10 @@ package jwt
 import (
 	"fmt"
 	"github.com/golang-jwt/jwt"
+	"github.com/mittacy/ego-layout/pkg/log"
 	"github.com/mittacy/ego-layout/pkg/store/cache"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
-	"go.uber.org/zap"
 	"strings"
 	"time"
 )
@@ -146,7 +146,7 @@ func (ctl *token) JoinBlackList(token string) error {
 
 	_, err := ctl.Cache.Do("ZREMRANGEBYSCORE", ctl.BlackName, 0, nts)
 	if err != nil {
-		zap.S().Errorf("redis删除过期token错误: %s", err)
+		log.Errorf("redis删除过期token错误: %s", err)
 	}
 
 	ts := ctl.GetExpireTimestamp(token)

@@ -3,8 +3,8 @@ package cache
 import (
 	"fmt"
 	"github.com/gomodule/redigo/redis"
+	"github.com/mittacy/ego-layout/pkg/log"
 	"github.com/spf13/viper"
-	"go.uber.org/zap"
 	"math/rand"
 )
 
@@ -31,7 +31,7 @@ func ConnCustomRedis(name, apiName string) CustomRedis {
 // @return CustomRedigo
 func ConnRedisByPool(pool *redis.Pool, apiName string) CustomRedis {
 	if _, err := pool.Get().Do("ping"); err != nil {
-		zap.S().Panicf("连接redis失败, 检查redis配置, err: %s", err)
+		log.Panicf("连接redis失败, 检查redis配置, err: %s", err)
 	}
 
 	var serverName string

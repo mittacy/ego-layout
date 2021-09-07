@@ -1,15 +1,13 @@
 server:
-  env: debug        # debug/test/release
+  env: release        # debug/test/release
   name: ego-layout
   version: v1
   port: 10023
   readTimeout: 10     # 读等待时间，单位: 秒
   writeTimeout: 10    # 写等待时间，单位: 秒
 log:
-  path: ./logs        # 日志目录
-  bizMaxAge: 7        # 指定保留多少天的业务日志
-  lowLevel: debug     # 业务日志最低级别：debug、info、warn、error
-  callMaxAge: 7       # 指定保留多少天的请求日志
+  path: ./logs/go_community        # 日志目录
+  lowLevel: 0     # 业务日志最低级别：-1:debug、0:info、1:warn、2:error
 mysql:
   MYSQLKEY:
     host: 127.0.0.1

@@ -3,8 +3,8 @@ package cache
 import (
 	"fmt"
 	"github.com/gomodule/redigo/redis"
+	"github.com/mittacy/ego-layout/pkg/log"
 	"github.com/spf13/viper"
-	"go.uber.org/zap"
 	"time"
 )
 
@@ -28,12 +28,12 @@ func ConnRedis(name string) *redis.Pool {
 
 	var conf RedisConfig
 	if err := viper.UnmarshalKey(key, &conf); err != nil {
-		zap.S().Panicf("连接redis失败, 检查%s的配置, err: %s", key, err)
+		log.Panicf("连接redis失败, 检查%s的配置, err: %s", key, err)
 	}
 
 	pool, err := connectRedisPool(conf)
 	if err != nil {
-		zap.S().Panicf("连接redis失败, 检查%s的配置, err: %s", key, err)
+		log.Panicf("连接redis失败, 检查%s的配置, err: %s", key, err)
 	}
 
 	cachePool[key] = pool

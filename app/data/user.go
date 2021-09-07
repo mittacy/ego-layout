@@ -4,7 +4,7 @@ import (
 	"github.com/gomodule/redigo/redis"
 	"github.com/mittacy/ego-layout/app/model"
 	"github.com/mittacy/ego-layout/app/service"
-	"github.com/mittacy/ego-layout/pkg/logger"
+	"github.com/mittacy/ego-layout/pkg/log"
 	"github.com/mittacy/ego-layout/pkg/store/cache"
 	"gorm.io/gorm"
 )
@@ -14,10 +14,10 @@ import (
 type User struct {
 	db     *gorm.DB
 	cache  cache.CustomRedis
-	logger *logger.CustomLogger
+	logger *log.Logger
 }
 
-func NewUser(db *gorm.DB, cacheConn *redis.Pool, logger *logger.CustomLogger) service.IUserData {
+func NewUser(db *gorm.DB, cacheConn *redis.Pool, logger *log.Logger) service.IUserData {
 	c := cache.ConnRedisByPool(cacheConn, "user")
 
 	return &User{

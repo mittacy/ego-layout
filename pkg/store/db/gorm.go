@@ -2,8 +2,8 @@ package db
 
 import (
 	"fmt"
+	"github.com/mittacy/ego-layout/pkg/log"
 	"github.com/spf13/viper"
-	"go.uber.org/zap"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
@@ -29,12 +29,12 @@ func ConnectGorm(name string) *gorm.DB {
 
 	var dbConfig MysqlConf
 	if err := viper.UnmarshalKey(key, &dbConfig); err != nil {
-		zap.S().Panicf("连接数据库失败, 检查%s的配置, err: %s", key, err)
+		log.Panicf("连接数据库失败, 检查%s的配置, err: %s", key, err)
 	}
 
 	db, err := ConnectGormByConf(dbConfig)
 	if err != nil {
-		zap.S().Panicf("连接数据库失败, 检查%s的配置, err: %s", key, err)
+		log.Panicf("连接数据库失败, 检查%s的配置, err: %s", key, err)
 	}
 
 	dbPool[key] = db
