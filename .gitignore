@@ -2,4 +2,4 @@
 .idea/
 logs
 apidoc/
-dev.yaml
+local.yaml
