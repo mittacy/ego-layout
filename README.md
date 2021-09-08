@@ -43,10 +43,9 @@ ego 是对 Gin 的二次封装，便于快速开发业务服务
 │   │   ├── init.go
 │   ├── jwt
 │   │   └── token.go
-│   ├── logger				# 日志封装
-│   │   ├── init.go
-│   │   ├── mylogger.go
-│   │   ├── struct.go
+│   ├── log				# 日志封装
+│   │   ├── config.go
+│   │   ├── custom.go
 │   │   └── zap.go
 │   ├── response			# 响应封装
 │   │   ├── response.go
@@ -54,8 +53,7 @@ ego 是对 Gin 的二次封装，便于快速开发业务服务
 │   └── store
 │       ├── cache			# 缓存封装
 │       │   ├── config.go
-│       │   ├── custom.go
-│       │   └── redigo.go
+│       │   └── redis.go
 │       └── db				# 持久化封装
 │           ├── config.go
 │           └── gorm.go
@@ -81,10 +79,7 @@ ego 是对 Gin 的二次封装，便于快速开发业务服务
 └── utils                   # 工具封装
 │   └── err.go
 ├── logs                    # 日志文件目录
-│   ├── err
-│   │   └── default.log
-│   └── info
-│       └── default.log
+│   ├── default.log
 ├── default.yaml
 ├── go.mod
 ├── go.sum
