@@ -27,30 +27,53 @@ func (l *Logger) GetZap() *zap.Logger {
 	return l.l
 }
 
+// Debug logs a message at DebugLevel. The message includes any fields passed
+// at the log site, as well as any fields accumulated on the logger.
 func (l *Logger) Debug(msg string, fields ...Field) {
 	l.l.Debug(msg, fields...)
 }
 
+// Info logs a message at InfoLevel. The message includes any fields passed
+// at the log site, as well as any fields accumulated on the logger.
 func (l *Logger) Info(msg string, fields ...Field) {
 	l.l.Info(msg, fields...)
 }
 
+// Warn logs a message at WarnLevel. The message includes any fields passed
+// at the log site, as well as any fields accumulated on the logger.
 func (l *Logger) Warn(msg string, fields ...Field) {
 	l.l.Warn(msg, fields...)
 }
 
+// Error logs a message at ErrorLevel. The message includes any fields passed
+// at the log site, as well as any fields accumulated on the logger.
 func (l *Logger) Error(msg string, fields ...Field) {
 	l.l.Error(msg, fields...)
 }
 
+// DPanic logs a message at DPanicLevel. The message includes any fields
+// passed at the log site, as well as any fields accumulated on the logger.
+//
+// If the logger is in development mode, it then panics (DPanic means
+// "development panic"). This is useful for catching errors that are
+// recoverable, but shouldn't ever happen.
 func (l *Logger) DPanic(msg string, fields ...Field) {
 	l.l.DPanic(msg, fields...)
 }
 
+// Panic logs a message at PanicLevel. The message includes any fields passed
+// at the log site, as well as any fields accumulated on the logger.
+//
+// The logger then panics, even if logging at PanicLevel is disabled.
 func (l *Logger) Panic(msg string, fields ...Field) {
 	l.l.Panic(msg, fields...)
 }
 
+// Fatal logs a message at FatalLevel. The message includes any fields passed
+// at the log site, as well as any fields accumulated on the logger.
+//
+// The logger then calls os.Exit(1), even if logging at FatalLevel is
+// disabled.
 func (l *Logger) Fatal(msg string, fields ...Field) {
 	l.l.Fatal(msg, fields...)
 }
@@ -90,6 +113,43 @@ func (l *Logger) Panicf(template string, args ...interface{}) {
 func (l *Logger) Fatalf(template string, args ...interface{}) {
 	l.l.Sugar().Fatalf(template, args...)
 }
+
+// Debug uses fmt.Sprint to construct and log a message.
+func (l *Logger) SugarDebug(args ...interface{}) {
+	l.l.Sugar().Debug(args...)
+}
+
+// Info uses fmt.Sprint to construct and log a message.
+func (l *Logger) SugarInfo(args ...interface{}) {
+	l.l.Sugar().Info(args...)
+}
+
+// Warn uses fmt.Sprint to construct and log a message.
+func (l *Logger) SugarWarn(args ...interface{}) {
+	l.l.Sugar().Warn(args...)
+}
+
+// Error uses fmt.Sprint to construct and log a message.
+func (l *Logger) SugarError(args ...interface{}) {
+	l.l.Sugar().Error(args...)
+}
+
+// DPanic uses fmt.Sprint to construct and log a message. In development, the
+// logger then panics. (See DPanicLevel for details.)
+func (l *Logger) SugarDPanic(args ...interface{}) {
+	l.l.Sugar().DPanic(args...)
+}
+
+// Panic uses fmt.Sprint to construct and log a message, then panics.
+func (l *Logger) SugarPanic(args ...interface{}) {
+	l.l.Sugar().Panic(args...)
+}
+
+// Fatal uses fmt.Sprint to construct and log a message, then calls os.Exit.
+func (l *Logger) SugarFatal(args ...interface{}) {
+	l.l.Sugar().Fatal(args...)
+}
+
 
 // function variables for all field types in github.com/uber-go/zap/field.go
 var (
