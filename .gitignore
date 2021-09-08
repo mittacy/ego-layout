@@ -1,5 +1,6 @@
 .DS_Store
 .idea/
-logs
+logs/*
+!logs/.gitkeep
 apidoc/
 local.yaml
