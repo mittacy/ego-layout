@@ -1,31 +1,11 @@
 package cache
 
 import (
-	"fmt"
-	"github.com/spf13/viper"
+	"math/rand"
 	"time"
 )
 
-const (
-	RedisConnPrefix = "redis"		// 配置文件中的前缀
-)
-
-var (
-	GlobalRedisConf Redis
-)
-
-func Init() {
-	if err := viper.UnmarshalKey(RedisConnPrefix, &GlobalRedisConf); err != nil {
-		panic(fmt.Sprintf("cache init err: %s", err))
-	}
-}
-
-type Redis struct {
-	Expire    int64 `mapstructure:"expire"`
-	Deviation int64 `mapstructure:"deviation"`
-}
-
-type RedisConfig struct {
+type Config struct {
 	Network         string        `mapstructure:"network"`
 	Host            string        `mapstructure:"host"`
 	Port            int           `mapstructure:"port"`
@@ -36,4 +16,18 @@ type RedisConfig struct {
 	IdleTimeout     time.Duration `mapstructure:"idleTimeout"`
 	Wait            bool          `mapstructure:"wait"`
 	MaxConnLifeTime time.Duration `mapstructure:"maxConnLifeTime"`
+}
+
+type RandomExpire struct {
+	Expire    time.Duration // 过期时间
+	Deviation time.Duration // 随机偏离范围
+}
+
+// RandomExpire 生成随机有效期时间，单位:秒
+// @return {}
+func (r *RandomExpire) RandomExpire() int64 {
+	max := int64((r.Expire + r.Deviation) * time.Second)
+	min := int64((r.Expire - r.Deviation)  * time.Second)
+
+	return rand.Int63n(max-min) + min
 }

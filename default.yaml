@@ -17,6 +17,7 @@ mysql:
     password: password
     params: parseTime=True
 redis:
+  pre: ego-layout     # 服务名，作为前缀
   expire: 24          # 缓存有效期，单位:小时
   deviation: 5        # 随机偏移范围,例如:expire=24&deviation=1,则真正过期时间在23~25h之间随机
   REDISKEY:

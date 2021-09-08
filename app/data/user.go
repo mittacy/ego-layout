@@ -1,7 +1,6 @@
 package data
 
 import (
-	"github.com/gomodule/redigo/redis"
 	"github.com/mittacy/ego-layout/app/model"
 	"github.com/mittacy/ego-layout/app/service"
 	"github.com/mittacy/ego-layout/pkg/log"
@@ -13,16 +12,14 @@ import (
 
 type User struct {
 	db     *gorm.DB
-	cache  cache.CustomRedis
+	redis  *cache.Redis
 	logger *log.Logger
 }
 
-func NewUser(db *gorm.DB, cacheConn *redis.Pool, logger *log.Logger) service.IUserData {
-	c := cache.ConnRedisByPool(cacheConn, "user")
-
+func NewUser(db *gorm.DB, redis *cache.Redis, logger *log.Logger) service.IUserData {
 	return &User{
 		db:     db,
-		cache:  c,
+		redis:  redis,
 		logger: logger,
 	}
 }

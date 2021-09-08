@@ -37,10 +37,7 @@ func Init() {
 		log.Panic("初始化校验翻译器失败", zap.String("reason", err.Error()))
 	}
 
-	// 5. 初始化 Cache 配置
-	cache.Init()
-
 	// 5. 初始化token
-	tokenCache := cache.ConnCustomRedis("REDISKEY", "token")
-	jwt.InitToken(tokenCache)
+	tokenCache := cache.NewRedis("REDISKEY", "token")
+	jwt.Token = jwt.NewToken(tokenCache)
 }

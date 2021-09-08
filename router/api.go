@@ -1,7 +1,6 @@
 package router
 
 import (
-	"github.com/gomodule/redigo/redis"
 	"github.com/mittacy/ego-layout/app/api"
 	"github.com/mittacy/ego-layout/app/data"
 	"github.com/mittacy/ego-layout/app/service"
@@ -16,13 +15,12 @@ var (
 )
 
 func InitApi() {
-	userApi = InitUserApi(db.ConnectGorm("MYSQLKEY"), cache.ConnRedis("REDISKEY"))
+	userApi = InitUserApi(db.ConnectGorm("MYSQLKEY"), cache.NewRedis("REDISKEY", "user"))
 }
 
-func InitUserApi(db *gorm.DB, cache *redis.Pool) api.User {
+func InitUserApi(db *gorm.DB, redis *cache.Redis) api.User {
 	customLogger := log.New("user")
-	userData := data.NewUser(db, cache, customLogger)
+	userData := data.NewUser(db, redis, customLogger)
 	userService := service.NewUser(userData, customLogger)
-	userApi := api.NewUser(userService, customLogger)
-	return userApi
+	return api.NewUser(userService, customLogger)
 }

@@ -16,9 +16,8 @@ const secret = "NGfb9Bk34XwZ6CBSt8" // 服务开始后请勿更改密钥，否�
 var Token *token
 
 type token struct {
-	Expire    time.Duration
-	Cache     cache.CustomRedis
-	BlackName string // redis token黑名单集合键名
+	Redis    *cache.Redis
+	BlackKey string // token黑名单集合键名
 }
 
 type TokenData struct {
@@ -27,33 +26,18 @@ type TokenData struct {
 	jwt.StandardClaims
 }
 
-// InitToken 初始化
-// @param expireHours
-func InitToken(customRedis cache.CustomRedis) {
-	var expire time.Duration
-	if err := viper.UnmarshalKey("jwt.expire", &expire); err != nil {
-		panic(fmt.Sprintf("jwt init err: %s", err))
-	}
-
-	Token = NewToken(expire, customRedis)
-}
-
 // NewToken 生成新的token配置
-// @param expireHours token过期时间，单位：小时
-// @param cache redis操作句柄
-// @return *token token句柄
-func NewToken(expire time.Duration, customRedis cache.CustomRedis) *token {
-	expire = expire * time.Second * 3600
-
-	var serverName string
-	if err := viper.UnmarshalKey("server.name", &serverName); err != nil {
-		panic(fmt.Sprintf("get redis err: %s", err))
+// @param redis Redis连接
+// @return *token
+func NewToken(redis *cache.Redis) *token {
+	serverName := viper.GetString("server.name")
+	if serverName == "" {
+		panic(fmt.Sprintf("读取服务名错误, 请检查 server.name"))
 	}
 
 	return &token{
-		Expire:    expire,
-		Cache:     customRedis,
-		BlackName: fmt.Sprintf("%s:token:blacklist", serverName),
+		Redis:    redis,
+		BlackKey: fmt.Sprintf("%s:blacklist", redis.GetCachePrefixKey()),
 	}
 }
 
@@ -63,11 +47,13 @@ func NewToken(expire time.Duration, customRedis cache.CustomRedis) *token {
 // @return string token字符串
 // @return error
 func (ctl *token) Create(userId int64, role int) (string, error) {
+	e := viper.GetDuration("token.expire") * time.Hour
+
 	claims := jwt.MapClaims{
 		"id":     userId,
 		"role":   role,
 		"userId": userId,
-		"exp":    time.Now().Add(ctl.Expire).Unix(),
+		"exp":    time.Now().Add(e).Unix(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString([]byte(secret))
@@ -85,7 +71,7 @@ func (ctl *token) IsValid(tokenString string) bool {
 		return false
 	}
 	// 2. 验证是否在黑名单
-	reply, _ := ctl.Cache.Do("zscore", ctl.BlackName, tokenString)
+	reply, _ := ctl.Redis.Do("zscore", ctl.BlackKey, tokenString)
 	if reply != nil {
 		return false
 	}
@@ -96,7 +82,7 @@ func (ctl *token) IsValid(tokenString string) bool {
 // @param tokenString
 // @return *CustomClaims
 func (ctl *token) Parse(tokenString string) (*TokenData, error) {
-	t, _ := ctl.Cache.Do("zscore", ctl.BlackName, tokenString)
+	t, _ := ctl.Redis.Do("zscore", ctl.BlackKey, tokenString)
 	if t != nil {
 		return nil, nil
 	}
@@ -144,7 +130,7 @@ func (ctl *token) JoinBlackList(token string) error {
 	// 清除已经过期的token，没必要留在黑名单
 	nts := time.Now().Unix()
 
-	_, err := ctl.Cache.Do("ZREMRANGEBYSCORE", ctl.BlackName, 0, nts)
+	_, err := ctl.Redis.Do("ZREMRANGEBYSCORE", ctl.BlackKey, 0, nts)
 	if err != nil {
 		log.Errorf("redis删除过期token错误: %s", err)
 	}
@@ -153,7 +139,7 @@ func (ctl *token) JoinBlackList(token string) error {
 	if ts == 0 {
 		return nil
 	}
-	_, err = ctl.Cache.Do("ZADD", ctl.BlackName, ts, token)
+	_, err = ctl.Redis.Do("ZADD", ctl.BlackKey, ts, token)
 	if err != nil {
 		return errors.Wrap(err, "存储token黑名单出错")
 	}
