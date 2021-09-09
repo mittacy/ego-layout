@@ -150,7 +150,6 @@ func (l *Logger) SugarFatal(args ...interface{}) {
 	l.l.Sugar().Fatal(args...)
 }
 
-
 // function variables for all field types in github.com/uber-go/zap/field.go
 var (
 	Skip        = zap.Skip
@@ -209,13 +208,21 @@ var (
 	Fatal  = std.Fatal
 	Debug  = std.Debug
 
-	Debugf = std.Debugf
-	Infof = std.Infof
-	Warnf = std.Warnf
-	Errorf = std.Errorf
+	Debugf  = std.Debugf
+	Infof   = std.Infof
+	Warnf   = std.Warnf
+	Errorf  = std.Errorf
 	DPanicf = std.DPanicf
-	Panicf = std.Panicf
-	Fatalf = std.Fatalf
+	Panicf  = std.Panicf
+	Fatalf  = std.Fatalf
+
+	SugarDebug  = std.SugarDebug
+	SugarInfo   = std.SugarInfo
+	SugarWarn   = std.SugarWarn
+	SugarError  = std.SugarError
+	SugarDPanic = std.SugarDPanic
+	SugarPanic  = std.SugarPanic
+	SugarFatal  = std.SugarFatal
 )
 
 // ResetDefault 重置默认日志文件，不建议使用
@@ -235,6 +242,13 @@ func ResetDefault(l *Logger) {
 	DPanicf = std.DPanicf
 	Panicf = std.Panicf
 	Fatalf = std.Fatalf
+	SugarDebug = std.SugarDebug
+	SugarInfo = std.SugarInfo
+	SugarWarn = std.SugarWarn
+	SugarError = std.SugarError
+	SugarDPanic = std.SugarDPanic
+	SugarPanic = std.SugarPanic
+	SugarFatal = std.SugarFatal
 }
 
 type Logger struct {
