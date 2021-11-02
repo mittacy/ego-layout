@@ -5,8 +5,6 @@ import (
 	"github.com/mittacy/ego-layout/app/api"
 )
 
-func InitApi() {}
-
 func InitRouter(r *gin.Engine) {
 	// 控制器
 	User := api.NewUser()

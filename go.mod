@@ -7,6 +7,7 @@ require (
 	github.com/coreos/etcd v3.3.10+incompatible // indirect
 	github.com/coreos/go-etcd v2.0.0+incompatible // indirect
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
+	github.com/fvbock/endless v0.0.0-20170109170031-447134032cb6 // indirect
 	github.com/gin-contrib/zap v0.0.1 // indirect
 	github.com/gin-gonic/gin v1.7.4
 	github.com/go-playground/locales v0.14.0 // indirect
