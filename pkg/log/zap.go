@@ -14,6 +14,10 @@ type Logger struct {
 	l *zap.Logger
 }
 
+func (l *Logger) GetZap() *zap.Logger {
+	return l.l
+}
+
 func (l *Logger) Sync() error {
 	return l.l.Sync()
 }
