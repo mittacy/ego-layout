@@ -3,7 +3,7 @@ package model
 type User struct {
 	Id        int64
 	Name      string
-	Info      string
+	Introduce string
 	Password  string
 	Deleted   int8
 	CreatedAt int64

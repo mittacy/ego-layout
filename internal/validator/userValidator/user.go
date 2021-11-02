@@ -6,7 +6,7 @@ type GetReq struct {
 type GetReply struct {
 	Id        int64  `json:"id"`
 	Name      string `json:"name"`
-	Info      string `json:"info"`
+	Introduce string `json:"introduce"`
 	CreatedAt int64  `json:"created_at"`
 	UpdatedAt int64  `json:"updated_at"`
 }

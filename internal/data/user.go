@@ -1,21 +1,32 @@
 package data
 
-import "github.com/mittacy/ego-layout/internal/model"
+import (
+	"github.com/mittacy/ego-layout/apierr"
+	"github.com/mittacy/ego-layout/internal/model"
+	"github.com/mittacy/ego-layout/pkg/mysql"
+	"github.com/pkg/errors"
+	"gorm.io/gorm"
+)
 
-type User struct{}
+type User struct {
+	db *gorm.DB
+}
 
 func NewUser() User {
-	return User{}
+	return User{
+		db: mysql.NewClientByName("localhost"),
+	}
 }
 
 func (ctl *User) GetById(id int64) (*model.User, error) {
-	return &model.User{
-		Id:        id,
-		Name:      "Mittacy Chen",
-		Info:      "Yoyo",
-		Password:  "123456",
-		Deleted:   0,
-		CreatedAt: 1635823685,
-		UpdatedAt: 1635823685,
-	}, nil
+	user := model.User{}
+	if err := ctl.db.Where("id = ?", id).First(&user).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, apierr.ErrUserNoExist
+		}
+
+		return nil, errors.WithStack(err)
+	}
+
+	return &user, nil
 }

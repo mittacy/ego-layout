@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/mittacy/ego-layout/pkg/config"
 	"github.com/mittacy/ego-layout/pkg/log"
+	"github.com/mittacy/ego-layout/pkg/mysql"
 	"github.com/spf13/viper"
 	"go.uber.org/zap/zapcore"
 )
@@ -49,4 +50,7 @@ func Init() {
 		log.WithLevel(logLevel),
 		log.WithLogInConsole(logInConsole),
 		log.WithGlobalFields(globalFields...))
+
+	// 4. 初始化Mysql配置
+	mysql.InitConfig()
 }

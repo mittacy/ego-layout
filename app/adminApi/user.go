@@ -7,8 +7,6 @@ import (
 	"net/http"
 )
 
-var User = NewUser()
-
 type UserApi struct {
 	logger  *log.Logger
 	service service.User

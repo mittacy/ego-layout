@@ -2,14 +2,13 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/mittacy/ego-layout/apierr"
 	"github.com/mittacy/ego-layout/internal/service"
 	"github.com/mittacy/ego-layout/internal/transform"
 	"github.com/mittacy/ego-layout/internal/validator/userValidator"
 	"github.com/mittacy/ego-layout/pkg/log"
 	"github.com/mittacy/ego-layout/pkg/response"
 )
-
-var User = NewUser()
 
 type UserApi struct {
 	service   service.User
@@ -35,7 +34,7 @@ func (ctl *UserApi) GetUser(c *gin.Context) {
 
 	user, err := ctl.service.GetUserById(req.Id)
 	if err != nil {
-		response.CheckErrAndLog(c, ctl.logger, "get user", err)
+		response.CheckErrAndLog(c, ctl.logger, "get user", err, apierr.ErrUserNoExist)
 		return
 	}
 

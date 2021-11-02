@@ -13,6 +13,9 @@ var (
 
 	// 缓存
 	ErrCacheNoExist = errors.New("查询的缓存不存在")
+
+	// 用户
+	ErrUserNoExist = errors.New("用户不存在")
 )
 
 var errCode = map[error]int{

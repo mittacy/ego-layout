@@ -6,10 +6,12 @@ import (
 )
 
 func InitAdminRouter(r *gin.Engine) {
-	globalPath := "/admin/api"
+	// 控制器
+	AdminUser := adminApi.NewUser()
 
+	globalPath := "/admin/api"
 	g := r.Group(globalPath)
 	{
-		g.GET("/user/ping", adminApi.User.Ping)
+		g.GET("/user/ping", AdminUser.Ping)
 	}
 }

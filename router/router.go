@@ -1,23 +1,19 @@
 package router
 
 import (
-	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 	"github.com/mittacy/ego-layout/app/api"
-	"github.com/mittacy/ego-layout/pkg/log"
-	"time"
 )
 
+func InitApi() {}
+
 func InitRouter(r *gin.Engine) {
-	// 记录请求日志
-	requestLog := log.New("request")
-	r.Use(ginzap.Ginzap(requestLog.GetZap(), time.RFC3339, true))
-	r.Use(ginzap.RecoveryWithZap(requestLog.GetZap(), true))
+	// 控制器
+	User := api.NewUser()
 
 	globalPath := "/api"
-
 	g := r.Group(globalPath)
 	{
-		g.GET("/user", api.User.GetUser)
+		g.GET("/user", User.GetUser)
 	}
 }
