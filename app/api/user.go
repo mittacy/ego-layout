@@ -20,7 +20,7 @@ func NewUser() UserApi {
 	l := log.New("user")
 	return UserApi{
 		logger:    l,
-		service:   service.NewUser(),
+		service:   service.NewUser(l),
 		transform: transform.NewUser(l),
 	}
 }

@@ -3,15 +3,18 @@ package service
 import (
 	"github.com/mittacy/ego-layout/internal/data"
 	"github.com/mittacy/ego-layout/internal/model"
+	"github.com/mittacy/ego-layout/pkg/log"
 )
 
 type User struct {
-	data data.User
+	data   data.User
+	logger *log.Logger
 }
 
-func NewUser() User {
+func NewUser(logger *log.Logger) User {
 	return User{
-		data: data.NewUser(),
+		data:   data.NewUser(logger),
+		logger: logger,
 	}
 }
 

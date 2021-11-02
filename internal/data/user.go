@@ -5,20 +5,23 @@ import (
 	"github.com/mittacy/ego-layout/apierr"
 	"github.com/mittacy/ego-layout/internal/model"
 	"github.com/mittacy/ego-layout/pkg/cache"
+	"github.com/mittacy/ego-layout/pkg/log"
 	"github.com/mittacy/ego-layout/pkg/mysql"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
 
 type User struct {
-	db    *gorm.DB
-	cache *redis.Client
+	db     *gorm.DB
+	cache  *redis.Client
+	logger *log.Logger
 }
 
-func NewUser() User {
+func NewUser(logger *log.Logger) User {
 	return User{
-		db:    mysql.NewClientByName("localhost"),
-		cache: cache.NewClientByName("localhost", 0),
+		db:     mysql.NewClientByName("localhost"),
+		cache:  cache.NewClientByName("localhost", 0),
+		logger: logger,
 	}
 }
 

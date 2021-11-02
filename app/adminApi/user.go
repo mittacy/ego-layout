@@ -13,9 +13,11 @@ type UserApi struct {
 }
 
 func NewUser() UserApi {
+	l := log.New("admin-user")
+
 	return UserApi{
-		logger:  log.New("admin-user"),
-		service: service.NewUser(),
+		logger:  l,
+		service: service.NewUser(l),
 	}
 }
 
