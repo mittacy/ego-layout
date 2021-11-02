@@ -10,9 +10,28 @@ import (
 	"time"
 )
 
+type Logger struct {
+	l *zap.Logger
+}
+
+func (l *Logger) Sync() error {
+	return l.l.Sync()
+}
+
+var (
+	Info   = std.Info
+	Warn   = std.Warn
+	Error  = std.Error
+	DPanic = std.DPanic
+	Panic  = std.Panic
+	Fatal  = std.Fatal
+	Debug  = std.Debug
+	Sugar  = std.Sugar
+)
+
 var std = initStd()
 
-func initStd() *zap.Logger {
+func initStd() *Logger {
 	return NewWithLevel("default", globalLowLevel, zap.AddStacktrace(zapcore.WarnLevel))
 }
 
@@ -23,20 +42,28 @@ func Sync() error {
 	return nil
 }
 
-func Default() *zap.Logger {
+func Default() *Logger {
 	return std
 }
 
 // ResetDefault 重置默认日志文件
-func ResetDefault(l *zap.Logger) {
+func ResetDefault(l *Logger) {
 	std = l
+	Sugar = std.Sugar
+	Info = std.Info
+	Warn = std.Warn
+	Error = std.Error
+	DPanic = std.DPanic
+	Panic = std.Panic
+	Fatal = std.Fatal
+	Debug = std.Debug
 }
 
 // New 创建新日志文件句柄
 // @param logName 日志名
 // @param opts 日志配置选项
 // @return *Logger
-func New(logName string, opts ...zap.Option) *zap.Logger {
+func New(logName string, opts ...zap.Option) *Logger {
 	// 日志名检查
 	logName = strings.TrimSpace(logName)
 	if logName == "" {
@@ -56,7 +83,7 @@ func New(logName string, opts ...zap.Option) *zap.Logger {
 // @param level 最低日志级别
 // @param opts 日志配置选项
 // @return *Logger
-func NewWithLevel(logName string, level zapcore.Level, opts ...zap.Option) *zap.Logger {
+func NewWithLevel(logName string, level zapcore.Level, opts ...zap.Option) *Logger {
 	// 日志名检查
 	logName = strings.TrimSpace(logName)
 	if logName == "" {
@@ -71,7 +98,7 @@ func NewWithLevel(logName string, level zapcore.Level, opts ...zap.Option) *zap.
 	return newWithWriter(file, level, opts...)
 }
 
-func newWithWriter(writer io.Writer, level zapcore.Level, opts ...zap.Option) *zap.Logger {
+func newWithWriter(writer io.Writer, level zapcore.Level, opts ...zap.Option) *Logger {
 	if writer == nil {
 		panic("the writer is nil")
 	}
@@ -111,7 +138,11 @@ func newWithWriter(writer io.Writer, level zapcore.Level, opts ...zap.Option) *z
 	// 全局字段添加到每个日志中
 	opts = append(opts, zap.Fields(globalFields...))
 
-	return zap.New(core, opts...)
+	logger := &Logger{
+		l: zap.New(core, opts...),
+	}
+
+	return logger
 }
 
 func getLogPath(name string) string {

@@ -1,9 +1,5 @@
 package log
 
-import (
-	"go.uber.org/zap"
-)
-
 const (
 	jsonMarshalErrTitle = "json marshal err"
 	copierErrTitle      = "copier err"
@@ -14,26 +10,26 @@ const (
 
 // 业务常用的快捷记录日志方法
 
-func CopierErrLog(l *zap.Logger, err error) {
+func CopierErrLog(l *Logger, err error) {
 	BizLog(l, copierErrTitle, err)
 }
 
-func TransformErrLog(l *zap.Logger, err error) {
+func TransformErrLog(l *Logger, err error) {
 	BizLog(l, transformErrTitle, err)
 }
 
-func JsonMarshalErrLog(l *zap.Logger, err error) {
+func JsonMarshalErrLog(l *Logger, err error) {
 	BizLog(l, jsonMarshalErrTitle, err)
 }
 
-func CacheErrLog(l *zap.Logger, err error) {
+func CacheErrLog(l *Logger, err error) {
 	BizLog(l, cacheErrTitle, err)
 }
 
-func MysqlErrLog(l *zap.Logger, err error) {
+func MysqlErrLog(l *Logger, err error) {
 	BizLog(l, mysqlErrTitle, err)
 }
 
-func BizLog(l *zap.Logger, title string, err error) {
-	l.Sugar().Infof("%s:%s", title, err)
+func BizLog(l *Logger, title string, err error) {
+	l.Sugar().Errorf("%s: %s", title, err)
 }
