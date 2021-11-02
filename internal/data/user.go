@@ -1,20 +1,24 @@
 package data
 
 import (
+	"github.com/go-redis/redis/v8"
 	"github.com/mittacy/ego-layout/apierr"
 	"github.com/mittacy/ego-layout/internal/model"
+	"github.com/mittacy/ego-layout/pkg/cache"
 	"github.com/mittacy/ego-layout/pkg/mysql"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
 
 type User struct {
-	db *gorm.DB
+	db    *gorm.DB
+	cache *redis.Client
 }
 
 func NewUser() User {
 	return User{
-		db: mysql.NewClientByName("localhost"),
+		db:    mysql.NewClientByName("localhost"),
+		cache: cache.NewClientByName("localhost", 0),
 	}
 }
 

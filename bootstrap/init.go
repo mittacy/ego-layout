@@ -3,6 +3,7 @@ package bootstrap
 import (
 	"flag"
 	"github.com/gin-gonic/gin"
+	"github.com/mittacy/ego-layout/pkg/cache"
 	"github.com/mittacy/ego-layout/pkg/config"
 	"github.com/mittacy/ego-layout/pkg/log"
 	"github.com/mittacy/ego-layout/pkg/mysql"
@@ -53,4 +54,7 @@ func Init() {
 
 	// 4. 初始化Mysql配置
 	mysql.InitConfig()
+
+	// 5. 初始化缓存配置
+	cache.InitConfig()
 }
