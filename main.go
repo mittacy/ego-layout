@@ -16,7 +16,9 @@ func init() {
 
 func main() {
 	r := gin.New()
+	router.InitRequestLog(r)
 	router.InitRouter(r)
+	router.InitAdminRouter(r)
 
 	s := &http.Server{
 		Addr:           ":" + viper.GetString("APP_PORT"),

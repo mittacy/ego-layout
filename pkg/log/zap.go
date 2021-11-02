@@ -31,6 +31,13 @@ var (
 	Fatal  = std.Fatal
 	Debug  = std.Debug
 	Sugar  = std.Sugar
+
+	CopierErrLog      = std.CopierErrLog
+	TransformErrLog   = std.TransformErrLog
+	JsonMarshalErrLog = std.JsonMarshalErrLog
+	CacheErrLog       = std.CacheErrLog
+	MysqlErrLog       = std.MysqlErrLog
+	BizLog            = std.BizLog
 )
 
 var std = initStd()
@@ -61,6 +68,13 @@ func ResetDefault(l *Logger) {
 	Panic = std.Panic
 	Fatal = std.Fatal
 	Debug = std.Debug
+
+	CopierErrLog = std.CopierErrLog
+	TransformErrLog = std.TransformErrLog
+	JsonMarshalErrLog = std.JsonMarshalErrLog
+	CacheErrLog = std.CacheErrLog
+	MysqlErrLog = std.MysqlErrLog
+	BizLog = std.BizLog
 }
 
 // New 创建新日志文件句柄
