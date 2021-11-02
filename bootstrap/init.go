@@ -19,7 +19,7 @@ func Init() {
 	*/
 	configPath := flag.String("config", "./.env.development", "配置文件名")
 	serverPort := flag.String("port", "10244", "服务监听端口")
-	serverEnv := flag.String("env", "debug", "服务环境")
+	serverEnv := flag.String("env", "release", "服务环境")
 	flag.Parse()
 
 	// 1. 初始化配置文件
