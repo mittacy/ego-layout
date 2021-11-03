@@ -10,22 +10,22 @@ import (
 	"github.com/mittacy/ego-layout/pkg/response"
 )
 
-type UserApi struct {
+type User struct {
 	service   service.User
 	transform transform.User
 	logger    *log.Logger
 }
 
-func NewUser() UserApi {
+func NewUser() User {
 	l := log.New("user")
-	return UserApi{
+	return User{
 		logger:    l,
 		service:   service.NewUser(l),
 		transform: transform.NewUser(l),
 	}
 }
 
-func (ctl *UserApi) GetUser(c *gin.Context) {
+func (ctl *User) GetUser(c *gin.Context) {
 	req := userValidator.GetReq{}
 	if err := c.ShouldBindQuery(&req); err != nil {
 		response.ValidateErr(c, err)
