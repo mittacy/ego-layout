@@ -90,7 +90,7 @@ docs：http://www.mittacy.com/column/1633512445750
 
 ### 2. 修改配置信息
 
-配置文件位于项目根目录 `.env.development`，修改对应的配置信息：
+配置文件位于项目根目录 `.env.develop`，修改对应的配置信息：
 
 + `APP_*` 服务信息
 + `DB_*`  mysql信息
@@ -106,7 +106,7 @@ $ go mod download
 $ go run main.go -config .env.develop -env develop -port 8080
 ```
 
-> -config 参数，配置文件路径，默认为 `./.env.development`
+> -config 参数，配置文件路径，默认为 `./.env.develop`
 >
 > -env 服务运行环境，develop/test/production
 >
@@ -121,7 +121,7 @@ $ go run main.go -config .env.develop -env develop -port 8080
 
 ```shell
 SERVER = ego-layout
-CONFIG = .env.development
+CONFIG = .env.develop
 PORT = 10244
 ENV = release
 ```
