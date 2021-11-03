@@ -14,10 +14,12 @@ require (
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.9.0 // indirect
 	github.com/go-redis/redis/v8 v8.11.4 // indirect
+	github.com/go-resty/resty/v2 v2.6.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/go-cmp v0.5.6 // indirect
 	github.com/jinzhu/copier v0.3.2 // indirect
 	github.com/json-iterator/go v1.1.11 // indirect
+	github.com/mitchellh/mapstructure v1.4.2 // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/spf13/viper v1.9.0 // indirect
