@@ -98,6 +98,8 @@ docs：http://www.mittacy.com/column/1633512445750
 
 ### 3. 启动服务
 
+#### 3.1 使用命令启动
+
 ```shell
 $ cd myProjectName
 $ go mod download
@@ -112,6 +114,32 @@ $ go run main.go -config .env.development -env debug -port 8080
 > + test/release 不会将日志打印到控制台，正式环境应该设置为 release
 >
 > -port 服务端口，默认为 10244
+
+#### 3.2 使用 Makefile
+
+进入Makefile修改响应配置：
+
+```shell
+SERVER = ego-layout
+CONFIG = .env.development
+PORT = 10244
+ENV = release
+```
+
+启动服务
+
+```shell
+$ make clean
+
+# 启动服务
+$ make start
+
+# 优雅重启服务，不间断服务，脚本中的xargs命令格式只支持在 linux 运行
+$ make restart
+
+# 停止服务，脚本中的xargs命令格式只支持在 linux 运行
+$ make stop
+```
 
 ### 4. 生成业务框架代码
 
