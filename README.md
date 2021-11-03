@@ -103,15 +103,15 @@ docs：http://www.mittacy.com/column/1633512445750
 ```shell
 $ cd myProjectName
 $ go mod download
-$ go run main.go -config .env.development -env debug -port 8080
+$ go run main.go -config .env.develop -env develop -port 8080
 ```
 
 > -config 参数，配置文件路径，默认为 `./.env.development`
 >
-> -env 服务运行环境，debug/test/release，默认为 `debug`
+> -env 服务运行环境，develop/test/production
 >
-> + debug 会将日志同步打印到控制台
-> + test/release 不会将日志打印到控制台，正式环境应该设置为 release
+> + develop 会将日志同步打印到控制台
+> + test/production 不会将日志打印到控制台，正式环境应该设置为 production
 >
 > -port 服务端口，默认为 10244
 

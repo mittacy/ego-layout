@@ -7,29 +7,32 @@ import (
 	"github.com/mittacy/ego-layout/pkg/config"
 	"github.com/mittacy/ego-layout/pkg/log"
 	"github.com/mittacy/ego-layout/pkg/mysql"
+	"github.com/mittacy/ego-layout/utils"
 	"github.com/spf13/viper"
 	"go.uber.org/zap/zapcore"
 )
 
 func Init() {
 	/* 环境变量解析
-	 	-config 配置文件路径 example: ./.env.development
+	 	-config 配置文件路径 example: ./.env.develop
 		-port 服务监听端口 example: 10244
-		-env 服务监听端口 example: debug/test/release
+		-env 服务监听端口 example: develop/test/production
 	*/
-	configPath := flag.String("config", "./.env.development", "配置文件名")
+	configPath := flag.String("config", ".env.develop", "配置文件名")
+	serverEnv := flag.String("env", "", "服务环境")
 	serverPort := flag.String("port", "10244", "服务监听端口")
-	serverEnv := flag.String("env", "release", "服务环境")
 	flag.Parse()
 
 	// 1. 初始化配置文件
 	config.Init(*configPath)
+	// 命令行参数覆盖env配置
 	viper.Set("APP_PORT", *serverPort)
-	viper.Set("APP_ENV", *serverEnv)
+	if *serverEnv != "" {
+		viper.GetString("APP_ENV")
+	}
 
 	// 2. 设置GIN运行模式
-	appEnv := viper.GetString("APP_ENV")
-	gin.SetMode(appEnv)
+	gin.SetMode(utils.AppEnvToGinEnv(viper.GetString("APP_ENV")))
 
 	// 3. 初始化日志
 	logPath := viper.GetString("LOG_PATH")

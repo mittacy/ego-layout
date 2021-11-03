@@ -1,8 +1,8 @@
 .PHONY: build lint clean start restart stop help
 SERVER = ego-layout
-CONFIG = .env.development
+CONFIG = .env.develop
 PORT = 10244
-ENV = release
+ENV = production
 
 all: start
 
