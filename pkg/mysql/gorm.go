@@ -2,28 +2,11 @@ package mysql
 
 import (
 	"fmt"
-	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 	"log"
 )
-
-var (
-	dbConfig map[string]Conf
-)
-
-func InitConfig() {
-	dbConfig = map[string]Conf{
-		"localhost": {
-			Host:     viper.GetString("DB_CORE_RW_HOST"),
-			Port:     viper.GetInt("DB_CORE_RW_PORT"),
-			Database: viper.GetString("DB_DATABASE_RESOURCES"),
-			User:     viper.GetString("DB_CORE_RW_USERNAME"),
-			Password: viper.GetString("DB_CORE_RW_PASSWORD"),
-		},
-	}
-}
 
 // NewClientByName 直接通过配置名字获取新客户端
 // @param name 配置名

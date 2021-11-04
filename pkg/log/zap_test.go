@@ -82,9 +82,9 @@ func TestBizLog(t *testing.T) {
 	// 打印日志
 	bizLog := NewWithLevel("testBiz", zapcore.InfoLevel, zap.AddStacktrace(zapcore.WarnLevel))
 
-	CopierErrLog(bizLog, errors.New("copier error message"))
-	TransformErrLog(bizLog, errors.New("transform error message"))
-	JsonMarshalErrLog(bizLog, errors.New("json marshal error message"))
-	CacheErrLog(bizLog, errors.New("cache error message"))
-	MysqlErrLog(bizLog, errors.New("mysql error message"))
+	bizLog.CopierErrLog(errors.New("copier error message"))
+	bizLog.TransformErrLog(errors.New("transform error message"))
+	bizLog.JsonMarshalErrLog(errors.New("json marshal error message"))
+	bizLog.CacheErrLog(errors.New("cache error message"))
+	bizLog.MysqlErrLog(errors.New("mysql error message"))
 }

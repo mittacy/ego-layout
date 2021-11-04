@@ -4,23 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/go-redis/redis/v8"
-	"github.com/spf13/viper"
 	"log"
 )
-
-var (
-	cacheConfig map[string]Conf
-)
-
-func InitConfig() {
-	cacheConfig = map[string]Conf{
-		"localhost": {
-			Host:     viper.GetString("REDIS_LOCALHOST_RW_HOST"),
-			Port:     viper.GetInt("REDIS_LOCALHOST_RW_PORT"),
-			Password: viper.GetString("REDIS_LOCALHOST_RW_PASSWORD"),
-		},
-	}
-}
 
 // NewClientByName 直接通过配置名字获取新客户端
 // @param name 配置名
