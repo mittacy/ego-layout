@@ -19,6 +19,8 @@ func init() {
 
 func main() {
 	r := gin.New()
+	r.Use(gin.Recovery())
+
 	router.InitRequestLog(r)
 	router.InitRouter(r)
 	router.InitAdminRouter(r)
