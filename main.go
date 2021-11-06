@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/fvbock/endless"
 	"github.com/gin-gonic/gin"
+	"github.com/mittacy/ego-layout/app/task"
 	"github.com/mittacy/ego-layout/bootstrap"
 	"github.com/mittacy/ego-layout/pkg/log"
 	"github.com/mittacy/ego-layout/router"
@@ -21,6 +22,11 @@ func main() {
 	router.InitRequestLog(r)
 	router.InitRouter(r)
 	router.InitAdminRouter(r)
+
+	// 启动定时任务
+	go func() {
+		task.StartTasks()
+	}()
 
 	if err := graceServe(r); err != nil {
 		panic(err)
