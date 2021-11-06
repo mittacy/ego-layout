@@ -40,7 +40,11 @@ func Get(host, uri string) (map[string]interface{}, error) {
 		return nil, errors.New(res.Msg)
 	}
 
-	return res.Data.(map[string]interface{}), nil
+	if v, ok := res.Data.(map[string]interface{}); ok {
+		return v, nil
+	}
+
+	return map[string]interface{}{}, nil
 }
 
 // GetParams GET请求，返回数据为map结构
