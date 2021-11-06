@@ -14,16 +14,16 @@ type Task interface {
 	Job() cron.Job
 }
 
-func Tasks() []Task {
+func Tasks(logger *log.Logger) []Task {
 	return []Task{
-		&ExampleTask{},
+		NewExampleTask(logger),
 	}
 }
 
 func StartTasks() {
 	l := log.New("task")
 
-	var Tasks = Tasks()
+	var Tasks = Tasks(l)
 
 	c := cron.New()
 
