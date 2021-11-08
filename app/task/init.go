@@ -16,7 +16,7 @@ type Task interface {
 
 func Tasks(logger *log.Logger) []Task {
 	return []Task{
-		NewExampleTask(logger),
+		NewExample(logger),
 	}
 }
 

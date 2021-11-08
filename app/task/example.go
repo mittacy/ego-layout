@@ -22,7 +22,7 @@ func (t *Example) Spec() string {
 }
 
 func (t *Example) Job() cron.Job {
-	return &Example{}
+	return t
 }
 
 func (t *Example) Run() {
