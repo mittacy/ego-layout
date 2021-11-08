@@ -28,7 +28,7 @@ func StartTasks() {
 	c := cron.New()
 
 	for _, v := range Tasks {
-		id, err := c.AddJob(v.Spec(), v.Job())
+		id, err := c.AddJob(v.Spec(), cron.NewChain(cron.Recover(cron.DefaultLogger)).Then(v.Job()))
 		if err != nil {
 			l.Sugar().Errorf("task start fail, id: %d, jobName: %s, err: %s", id, v.Name(), err)
 		} else {
