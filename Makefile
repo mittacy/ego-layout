@@ -1,4 +1,4 @@
-.PHONY: build lint clean start restart stop help
+.PHONY: build clean start restart stop help
 SERVER = ego-layout
 CONFIG = .env.develop
 PORT = 10244
@@ -7,30 +7,36 @@ ENV = production
 all: start
 
 build:
-	go build -o $(SERVER) main.go
-
-lint:
-	golint ./...
+	@echo "building..."
+	@go build -o $(SERVER) main.go
+	@echo "build success"
 
 clean:
-	rm -rf $(SERVER)
-	go clean -i .
+	@echo "cleaning..."
+	@rm -rf $(SERVER)
+	@go clean -i .
+	@echo "clean success"
 
 start:
-	make build
-	nohup ./$(SERVER) -config $(CONFIG) -port $(PORT) -env $(ENV) > nohup.log 2>&1 &
+	@make build
+	@echo "starting..."
+	@nohup ./$(SERVER) -config $(CONFIG) -port $(PORT) -env $(ENV) > nohup.log 2>&1 &
+	@echo "start success"
 
 restart:
-	make build
-	ps aux | grep "$(SERVER)" | grep -v grep | awk '{print $2}' | xargs -i kill -1 {}
+	@make build
+	@echo "restarting..."
+	@ps aux | grep "$(SERVER)" | grep -v grep | awk '{print $$2}' | xargs -I {} kill -1 {}
+	@echo "restart success"
 
 stop:
-	ps aux | grep "$(SERVER)" | grep -v grep | awk '{print $2}' | xargs -i kill {}
+	@echo "stopping..."
+	@ps aux | grep "$(SERVER)" | grep -v grep | awk '{print $$2}' | xargs -I {} kill -9 {}
+	@echo "stop success"
 
 help:
 	@echo "make build: compile packages and dependencies"
-	@echo "make lint: golint ./..."
 	@echo "make clean: remove object files and cached files"
 	@echo "make start: make build and start service"
-	@echo "make restart: grace restart service"
+	@echo "make restart: make build and then grace restart service"
 	@echo "make stop: grace stop service"
