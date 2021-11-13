@@ -1,6 +1,9 @@
 package restyHttp
 
-import "testing"
+import (
+	"testing"
+	"time"
+)
 
 type Tag struct {
 	Id      int64  `json:"id" mapstructure:"id"`
@@ -14,7 +17,7 @@ type Tags struct {
 
 func TestGet(t *testing.T) {
 	host := ""
-	res, err := Get(host, "")
+	res, err := Get(host, "", time.Second*5)
 
 	if err != nil {
 		t.Error(err)
@@ -37,7 +40,7 @@ func TestGetParams(t *testing.T) {
 		"community_id": "c_60bede024a515_VnCNlkQA2383",
 	}
 
-	res, err := GetParams(host, uri, params)
+	res, err := GetParams(host, uri, params, time.Second*5)
 
 	if err != nil {
 		t.Error(err)
