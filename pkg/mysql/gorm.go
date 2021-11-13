@@ -2,14 +2,20 @@ package mysql
 
 import (
 	"fmt"
+	"github.com/mittacy/ego-layout/pkg/log"
+	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
-	"log"
+	"moul.io/zapgorm2"
+	"sync"
+	"time"
 )
 
 var (
-	dbPool map[string]*gorm.DB	// 因为gorm内部维护了连接池，所以根据mysql dsn判断，如果dsn相同直接返回同一个连接即可
+	dbPool     map[string]*gorm.DB // 因为gorm内部维护了连接池，所以根据mysql dsn判断，如果dsn相同直接返回同一个连接即可
+	logInit    sync.Once           // 初始一次日志文件
+	gormLogger zapgorm2.Logger     // gorm日志句柄
 )
 
 func init() {
@@ -34,7 +40,20 @@ func NewClientByName(name string) *gorm.DB {
 // @return *gorm.DB gorm连接
 // @return error
 func NewClient(conf Conf) *gorm.DB {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s", conf.User, conf.Password, conf.Host, conf.Port, conf.Database)
+	// 初始化日志句柄
+	logInit.Do(func() {
+		slowThreshold := viper.GetDuration("GORM_SLOW_LOG_THRESHOLD") * time.Millisecond
+		if slowThreshold == 0 {
+			slowThreshold = time.Millisecond * 100
+		}
+
+		l := log.New("gorm")
+		gormLogger = zapgorm2.New(l.GetZap())
+		gormLogger.SlowThreshold = slowThreshold
+		gormLogger.SetAsDefault()
+	})
+
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?parseTime=true", conf.User, conf.Password, conf.Host, conf.Port, conf.Database)
 	if conf.Params != "" {
 		dsn = fmt.Sprintf("%s?%s", dsn, conf.Params)
 	}
@@ -45,6 +64,7 @@ func NewClient(conf Conf) *gorm.DB {
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{SingularTable: true}, // 是否禁用表名复数形式
+		Logger:         gormLogger,
 	})
 	if err != nil {
 		log.Panicf("连接数据库失败, 检查配置, err: %s, conf: %+v", err, conf)

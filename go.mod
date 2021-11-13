@@ -26,6 +26,8 @@ require (
 	github.com/spf13/viper v1.9.0 // indirect
 	github.com/stretchr/testify v1.7.0 // indirect
 	github.com/xordataexchange/crypt v0.0.3-0.20170626215501-b2862e3d0a77 // indirect
+	go.uber.org/atomic v1.9.0 // indirect
+	go.uber.org/multierr v1.7.0 // indirect
 	go.uber.org/zap v1.19.1 // indirect
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
 	golang.org/x/sys v0.0.0-20210823070655-63515b42dcdf // indirect
@@ -34,5 +36,6 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 	gorm.io/driver/mysql v1.1.3 // indirect
-	gorm.io/gorm v1.22.2 // indirect
+	gorm.io/gorm v1.22.3 // indirect
+	moul.io/zapgorm2 v1.1.0 // indirect
 )
