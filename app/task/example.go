@@ -27,6 +27,6 @@ func (t *Example) Job() cron.Job {
 
 func (t *Example) Run() {
 	// do something
-	log.Info("Hello, this is the example task")
+	t.logger.Info("Hello, this is the example task")
 }
 
