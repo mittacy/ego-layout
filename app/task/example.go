@@ -18,7 +18,7 @@ func (t *Example) Name() string {
 }
 
 func (t *Example) Spec() string {
-	return "0 8 * * ?"
+	return "@every 10s"
 }
 
 func (t *Example) Job() cron.Job {
@@ -27,6 +27,6 @@ func (t *Example) Job() cron.Job {
 
 func (t *Example) Run() {
 	// do something
-	t.logger.Info("Hello, this is the example task")
+	t.logger.Infow("Hello, this is the example task", "task", t.Name())
 }
 
