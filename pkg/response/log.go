@@ -18,7 +18,7 @@ func CheckErrAndLog(c *gin.Context, logger *log.Logger, title string, sourceErr 
 		return
 	}
 
-	logger.BizLog(title, sourceErr)
+	logger.BizErrorLog(title, sourceErr)
 	Unknown(c)
 	return
 }

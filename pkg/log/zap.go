@@ -32,12 +32,28 @@ var (
 	Debug  = std.Debug
 	Sugar  = std.Sugar
 
+	Infof   = std.Infof
+	Warnf   = std.Warnf
+	Errorf  = std.Errorf
+	DPanicf = std.DPanicf
+	Panicf  = std.Panicf
+	Fatalf  = std.Fatalf
+	Debugf  = std.Debugf
+
+	Infow   = std.Infow
+	Warnw   = std.Warnw
+	Errorw  = std.Errorw
+	DPanicw = std.DPanicw
+	Panicw  = std.Panicw
+	Fatalw  = std.Fatalw
+	Debugw  = std.Debugw
+
 	CopierErrLog      = std.CopierErrLog
 	TransformErrLog   = std.TransformErrLog
 	JsonMarshalErrLog = std.JsonMarshalErrLog
 	CacheErrLog       = std.CacheErrLog
 	MysqlErrLog       = std.MysqlErrLog
-	BizLog            = std.BizLog
+	BizLog            = std.BizErrorLog
 )
 
 var std = initStd()
@@ -69,12 +85,28 @@ func ResetDefault(l *Logger) {
 	Fatal = std.Fatal
 	Debug = std.Debug
 
+	Infof = std.Infof
+	Warnf = std.Warnf
+	Errorf = std.Errorf
+	DPanicf = std.DPanicf
+	Panicf = std.Panicf
+	Fatalf = std.Fatalf
+	Debugf = std.Debugf
+
+	Infow = std.Infow
+	Warnw = std.Warnw
+	Errorw = std.Errorw
+	DPanicw = std.DPanicw
+	Panicw = std.Panicw
+	Fatalw = std.Fatalw
+	Debugw = std.Debugw
+
 	CopierErrLog = std.CopierErrLog
 	TransformErrLog = std.TransformErrLog
 	JsonMarshalErrLog = std.JsonMarshalErrLog
 	CacheErrLog = std.CacheErrLog
 	MysqlErrLog = std.MysqlErrLog
-	BizLog = std.BizLog
+	BizLog = std.BizErrorLog
 }
 
 // New 创建新日志文件句柄
@@ -131,24 +163,29 @@ func newWithWriter(writer io.Writer, level zapcore.Level, opts ...zap.Option) *L
 
 	// 配置
 	encoderConfig := zapcore.EncoderConfig{
-		TimeKey:       "log_at",
-		LevelKey:      "level",
-		NameKey:       "logger",
-		CallerKey:     "caller",
-		MessageKey:    "context",
-		StacktraceKey: "stacktrace",
-		LineEnding:    zapcore.DefaultLineEnding,
-		EncodeLevel:   zapcore.CapitalLevelEncoder, // 大写编码器
+		TimeKey:  "log_at",
+		LevelKey: "level",
+		NameKey:  "logger",
+		//CallerKey:     "caller",
+		MessageKey: "context",
+		//StacktraceKey: "stacktrace",
+		LineEnding:  zapcore.DefaultLineEnding,
+		EncodeLevel: zapcore.CapitalLevelEncoder, // 大写编码器
 		EncodeTime: func(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
-			enc.AppendString(t.Format("2006-01-02T15:04:05.000Z"))
+			enc.AppendString(t.Format("2006-01-02 15:04:05"))
 		}, // ISO8601 UTC 时间格式
 		EncodeDuration: zapcore.SecondsDurationEncoder,
-		EncodeCaller:   zapcore.ShortCallerEncoder,
-		EncodeName:     zapcore.FullNameEncoder,
+		//EncodeCaller:   zapcore.ShortCallerEncoder,
+		EncodeName: zapcore.FullNameEncoder,
+	}
+
+	encoder := zapcore.NewJSONEncoder(encoderConfig)
+	if !jsonEncoder {
+		encoder = zapcore.NewConsoleEncoder(encoderConfig)
 	}
 
 	core := zapcore.NewCore(
-		zapcore.NewJSONEncoder(encoderConfig),
+		encoder,
 		syncer,
 		level,
 	)

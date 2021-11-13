@@ -9,6 +9,7 @@ var (
 	globalLowLevel = zapcore.DebugLevel
 	logInConsole   = false
 	globalFields   = make([]zapcore.Field, 0)
+	jsonEncoder    = true // 是否为json格式日志
 )
 
 type ConfigOption func()
@@ -55,6 +56,16 @@ func WithLogInConsole(isLogInConsole bool) ConfigOption {
 func WithGlobalFields(field ...zapcore.Field) ConfigOption {
 	return func() {
 		globalFields = append(globalFields, field...)
+		ResetDefault(initStd())
+	}
+}
+
+// WithGlobalEncoderJSON 是否为json格式日志
+// @param isJSONEncoder
+// @return ConfigOption
+func WithGlobalEncoderJSON(isJSONEncoder bool) ConfigOption {
+	return func() {
+		jsonEncoder = isJSONEncoder
 		ResetDefault(initStd())
 	}
 }

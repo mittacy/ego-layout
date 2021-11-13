@@ -37,6 +37,7 @@ func Init() {
 	// 3. 初始化日志
 	logPath := viper.GetString("LOG_PATH")
 	logLevel := zapcore.Level(viper.GetInt("LOG_LOW_LEVEL"))
+	logEncoderJson := viper.GetBool("LOG_ENCODER_JSON")
 	logInConsole := false
 	if gin.Mode() == gin.DebugMode {
 		logInConsole = true
@@ -53,7 +54,8 @@ func Init() {
 		log.WithPath(logPath),
 		log.WithLevel(logLevel),
 		log.WithLogInConsole(logInConsole),
-		log.WithGlobalFields(globalFields...))
+		log.WithGlobalFields(globalFields...),
+		log.WithGlobalEncoderJSON(logEncoderJson))
 
 	// 4. 初始化Mysql配置
 	mysql.InitConfig()

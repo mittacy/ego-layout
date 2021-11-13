@@ -1,7 +1,7 @@
 package log
 
 import (
-	"errors"
+	"github.com/pkg/errors"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"testing"
@@ -17,7 +17,8 @@ func TestDefault(t *testing.T) {
 		},
 	}
 
-	SetGlobalConfig(WithPath("./"), WithLevel(zapcore.DebugLevel), WithLogInConsole(true), WithGlobalFields(globalFields...))
+	SetGlobalConfig(WithPath("./"), WithLevel(zapcore.DebugLevel), WithLogInConsole(true),
+		WithGlobalFields(globalFields...), WithGlobalEncoderJSON(true))
 
 	// 打印日志
 	Debug("this is Debug")
@@ -25,15 +26,20 @@ func TestDefault(t *testing.T) {
 	Warn("this is Warn")
 	Error("this is Error")
 
-	std.Sugar().Debug("this is SugarDebug")
-	std.Sugar().Info("this is SugarInfo")
-	std.Sugar().Warn("this is SugarWarn")
-	std.Sugar().Error("this is SugarError")
+	std.Debug("this is SugarDebug")
+	std.Info("this is SugarInfo")
+	std.Warn("this is SugarWarn")
+	std.Error("this is SugarError")
 
-	std.Sugar().Debugf("this is SugarDebugf %s", "Debugf")
-	std.Sugar().Infof("this is SugarInfo %s", "Infof")
-	std.Sugar().Warnf("this is SugarWarnf %s", "Warn")
-	std.Sugar().Errorf("this is SugarErrorf %s", "Errorf")
+	std.Debugf("this is %s", "Debugf")
+	std.Infof("this is %s", "Infof")
+	std.Warnf("this is %s", "Warn")
+	std.Errorf("this is %s", "Errorf")
+
+	std.Debugw("this is Debugw", "k", "Debugw")
+	std.Infow("this is Infow", "k", "Infow")
+	std.Warnw("this is Warnw", "k", "Warnw")
+	std.Errorw("this is Errorw", "k", "Errorw")
 }
 
 func TestNewLog(t *testing.T) {
@@ -51,20 +57,20 @@ func TestNewLog(t *testing.T) {
 	// 打印日志
 	bizLog := NewWithLevel("testNew", zapcore.InfoLevel, zap.AddStacktrace(zapcore.WarnLevel))
 
-	bizLog.Debug("this is Debug")
-	bizLog.Info("this is Info")
-	bizLog.Warn("this is Warn")
-	bizLog.Error("this is Error")
+	bizLog.Debug("this is SugarDebug")
+	bizLog.Info("this is SugarInfo")
+	bizLog.Warn("this is SugarWarn")
+	bizLog.Error("this is SugarError")
 
-	bizLog.Sugar().Debug("this is SugarDebug")
-	bizLog.Sugar().Info("this is SugarInfo")
-	bizLog.Sugar().Warn("this is SugarWarn")
-	bizLog.Sugar().Error("this is SugarError")
+	bizLog.Debugf("this is %s", "Debugf")
+	bizLog.Infof("this is %s", "Infof")
+	bizLog.Warnf("this is %s", "Warn")
+	bizLog.Errorf("this is %s", "Errorf")
 
-	bizLog.Sugar().Debugf("this is SugarDebugf %s", "Debugf")
-	bizLog.Sugar().Infof("this is SugarInfo %s", "Infof")
-	bizLog.Sugar().Warnf("this is SugarWarnf %s", "Warn")
-	bizLog.Sugar().Errorf("this is SugarErrorf %s", "Errorf")
+	bizLog.Debugw("this is Debugw", "k", "Debugw")
+	bizLog.Infow("this is Infow", "k", "Infow")
+	bizLog.Warnw("this is Warnw", "k", "Warnw")
+	bizLog.Errorw("this is Errorw", "k", "Errorw")
 }
 
 func TestBizLog(t *testing.T) {
@@ -77,7 +83,32 @@ func TestBizLog(t *testing.T) {
 		},
 	}
 
-	SetGlobalConfig(WithPath("./"), WithLevel(zapcore.DebugLevel), WithLogInConsole(true), WithGlobalFields(globalFields...))
+	SetGlobalConfig(WithPath("./"), WithLevel(zapcore.DebugLevel), WithLogInConsole(true),
+		WithGlobalFields(globalFields...), WithGlobalEncoderJSON(true))
+
+	// 打印日志
+	bizLog := NewWithLevel("testBiz", zapcore.InfoLevel, zap.AddStacktrace(zapcore.WarnLevel))
+
+	bizLog.CopierErrLog(errors.New("copier error message"))
+	bizLog.TransformErrLog(errors.New("transform error message"))
+	bizLog.JsonMarshalErrLog(errors.New("json marshal error message"))
+	bizLog.CacheErrLog(errors.New("cache error message"))
+	bizLog.MysqlErrLog(errors.New("mysql error message"))
+	bizLog.UnknownErrLog(errors.New("unknown error message"))
+}
+
+func TestConsoleLog(t *testing.T) {
+	// 日志全局配置
+	globalFields := []zapcore.Field{
+		{
+			Key:    "module_name",
+			Type:   zapcore.StringType,
+			String: "serverName",
+		},
+	}
+
+	SetGlobalConfig(WithPath("./"), WithLevel(zapcore.DebugLevel), WithLogInConsole(true),
+		WithGlobalFields(globalFields...), WithGlobalEncoderJSON(false))
 
 	// 打印日志
 	bizLog := NewWithLevel("testBiz", zapcore.InfoLevel, zap.AddStacktrace(zapcore.WarnLevel))
