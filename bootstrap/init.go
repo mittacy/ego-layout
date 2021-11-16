@@ -7,7 +7,7 @@ import (
 	"github.com/mittacy/ego-layout/pkg/config"
 	"github.com/mittacy/ego-layout/pkg/log"
 	"github.com/mittacy/ego-layout/pkg/mysql"
-	"github.com/mittacy/ego-layout/utils"
+	"github.com/mittacy/ego-layout/utils/serverUtil"
 	"github.com/spf13/viper"
 	"go.uber.org/zap/zapcore"
 )
@@ -32,7 +32,7 @@ func Init() {
 	}
 
 	// 2. 设置GIN运行模式
-	gin.SetMode(utils.AppEnvToGinEnv(viper.GetString("APP_ENV")))
+	gin.SetMode(serverUtil.AppEnvToGinEnv(viper.GetString("APP_ENV")))
 
 	// 3. 初始化日志
 	logPath := viper.GetString("LOG_PATH")

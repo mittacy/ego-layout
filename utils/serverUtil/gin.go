@@ -1,4 +1,4 @@
-package utils
+package serverUtil
 
 import "github.com/gin-gonic/gin"
 
