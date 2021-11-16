@@ -92,9 +92,9 @@ docs：http://www.mittacy.com/column/1633512445750
 
 配置文件位于项目根目录 `.env.develop`，修改对应的配置信息：
 
-+ `APP_*` 服务信息
-+ `DB_*`  mysql信息
-+ `REDIS_*` redis信息
++ 服务信息
++ mysql信息
++ redis信息
 
 ### 3. 启动服务
 
@@ -159,5 +159,8 @@ $ ego tpl service article
 
 # 创建 data、model 代码模板
 $ ego tpl data article
+
+# 创建定时任务 task 代码模板
+$ ego tpl task notice
 ```
 
