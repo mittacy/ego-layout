@@ -64,7 +64,11 @@ func GetParams(host, uri string, params map[string]string, timeout time.Duration
 		return nil, errors.New(res.Msg)
 	}
 
-	return res.Data.(map[string]interface{}), nil
+	if v, ok := res.Data.(map[string]interface{}); ok {
+		return v, nil
+	}
+
+	return map[string]interface{}{}, nil
 }
 
 // Post POST请求
@@ -97,7 +101,11 @@ func Post(host, uri string, body interface{}, timeout time.Duration) (map[string
 		return nil, errors.New(res.Msg)
 	}
 
-	return res.Data.(map[string]interface{}), nil
+	if v, ok := res.Data.(map[string]interface{}); ok {
+		return v, nil
+	}
+
+	return map[string]interface{}{}, nil
 }
 
 func fullUrl(host, uri string) string {
