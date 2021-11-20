@@ -1,13 +1,16 @@
 package data
 
 import (
+	"fmt"
 	"github.com/mittacy/ego-layout/internal/model"
 	"github.com/mittacy/ego-layout/pkg/log"
+	"github.com/spf13/viper"
 )
 
 type User struct {
 	//db     *gorm.DB
 	//cache  *redis.Client
+	cacheKeyPre string
 	logger *log.Logger
 }
 
@@ -15,7 +18,8 @@ func NewUser(logger *log.Logger) User {
 	return User{
 		//db:     mysql.NewClientByName("localhost"),
 		//cache:  cache.NewClientByName("localhost", 0),
-		logger: logger,
+		logger:      logger,
+		cacheKeyPre: fmt.Sprintf("%s:user", viper.GetString("APP_NAME")),
 	}
 }
 

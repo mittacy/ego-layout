@@ -35,32 +35,32 @@ func SuccessMsg(c *gin.Context, data interface{}, msg string) {
 // Fail 失败响应
 // msg 提示信息
 func Fail(c *gin.Context) {
-	Custom(c, http.StatusOK, 1, "fail", nil)
+	Custom(c, http.StatusOK, 1, "fail", struct{}{})
 }
 
 // FailMsg 带自定义信息的失败响应
 // msg 自定义提示信息
 func FailMsg(c *gin.Context, msg string) {
-	Custom(c, http.StatusOK, 1, msg, nil)
+	Custom(c, http.StatusOK, 1, msg, struct{}{})
 }
 
 // FailErr 带有错误的失败响应
 // err 错误
 func FailErr(c *gin.Context, err error) {
-	Custom(c, http.StatusOK, apierr.ErrCode(err), err.Error(), nil)
+	Custom(c, http.StatusOK, apierr.ErrCode(err), err.Error(), struct{}{})
 }
 
 // Unknown 未知错误响应
 func Unknown(c *gin.Context) {
-	Custom(c, http.StatusInternalServerError, 500, "unknown Error", nil)
+	Custom(c, http.StatusInternalServerError, 500, "unknown Error", struct{}{})
 }
 
 // Unauthorized 未认证响应
 func Unauthorized(c *gin.Context) {
-	Custom(c, http.StatusUnauthorized, 401, "未认证", nil)
+	Custom(c, http.StatusUnauthorized, 401, "未认证", struct{}{})
 }
 
 // Forbidden 权限不足响应
 func Forbidden(c *gin.Context) {
-	Custom(c, http.StatusForbidden, 401, "权限不足", nil)
+	Custom(c, http.StatusForbidden, 401, "权限不足", struct{}{})
 }
