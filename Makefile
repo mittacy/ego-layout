@@ -1,6 +1,6 @@
 .PHONY: build clean start restart stop help
 SERVER = ego-layout
-CONFIG = .env.develop
+CONFIG = .env.development
 PORT = 10244
 ENV = production
 

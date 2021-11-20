@@ -14,11 +14,11 @@ import (
 
 func Init() {
 	/* 环境变量解析
-	 	-config 配置文件路径 example: ./.env.develop
+	 	-config 配置文件路径 example: ./.env.development
 		-port 服务监听端口 example: 10244
-		-env 服务监听端口 example: develop/test/production
+		-env 服务监听端口 example: development/test/production
 	*/
-	configPath := flag.String("config", ".env.develop", "配置文件名")
+	configPath := flag.String("config", ".env.development", "配置文件名")
 	serverEnv := flag.String("env", "", "服务环境")
 	serverPort := flag.String("port", "10244", "服务监听端口")
 	flag.Parse()
