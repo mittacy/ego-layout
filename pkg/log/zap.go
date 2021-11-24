@@ -53,7 +53,7 @@ var (
 	JsonMarshalErrLog = std.JsonMarshalErrLog
 	CacheErrLog       = std.CacheErrLog
 	MysqlErrLog       = std.MysqlErrLog
-	BizLog            = std.BizErrorLog
+	BizErrorLog            = std.BizErrorLog
 )
 
 var std = initStd()
@@ -106,7 +106,7 @@ func ResetDefault(l *Logger) {
 	JsonMarshalErrLog = std.JsonMarshalErrLog
 	CacheErrLog = std.CacheErrLog
 	MysqlErrLog = std.MysqlErrLog
-	BizLog = std.BizErrorLog
+	BizErrorLog = std.BizErrorLog
 }
 
 // New 创建新日志文件句柄
