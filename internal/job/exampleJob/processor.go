@@ -7,7 +7,6 @@ import (
 	"github.com/hibiken/asynq"
 	"github.com/mittacy/ego-layout/pkg/async"
 	"github.com/mittacy/ego-layout/pkg/log"
-	"time"
 )
 
 func NewProcessor() *Processor {
@@ -27,9 +26,8 @@ func (processor *Processor) ProcessTask(ctx context.Context, t *asynq.Task) erro
 		return fmt.Errorf("json.Unmarshal failed: %v: %w", err, asynq.SkipRetry)
 	}
 
-	processor.l.Infof("开始处理邮件, 数据: %+v", p)
-	time.Sleep(time.Second * 2)
-	processor.l.Infof("邮件处理完毕!!!")
+	// do work...
+	processor.l.Infof("数据: %+v", p)
 
 	return nil
 }
