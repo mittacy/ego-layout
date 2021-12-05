@@ -26,12 +26,12 @@ start:
 restart:
 	@make build
 	@echo "restarting..."
-	@ps aux | grep "$(SERVER)" | grep -v grep | awk '{print $$2}' | xargs -I {} kill -1 {}
+	@ps aux | grep "$(PORT)" | grep -v grep | awk '{print $$2}' | xargs -I {} kill -1 {}
 	@echo "restart success"
 
 stop:
 	@echo "stopping..."
-	@ps aux | grep "$(SERVER)" | grep -v grep | awk '{print $$2}' | xargs -I {} kill -9 {}
+	@ps aux | grep "$(PORT)" | grep -v grep | awk '{print $$2}' | xargs -I {} kill -9 {}
 	@echo "stop success"
 
 help:

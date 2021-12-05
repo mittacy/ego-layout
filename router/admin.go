@@ -2,16 +2,16 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/mittacy/ego-layout/app/adminApi"
+	"github.com/mittacy/ego-layout/app/api"
 )
 
 func InitAdminRouter(r *gin.Engine) {
 	// 控制器
-	AdminUser := adminApi.NewUser()
+	User := api.NewUser()
 
 	globalPath := "/admin/api"
 	g := r.Group(globalPath)
 	{
-		g.GET("/user/ping", AdminUser.Ping)
+		g.GET("/user/info", User.GetUser)
 	}
 }

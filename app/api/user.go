@@ -25,6 +25,10 @@ func NewUser() User {
 	}
 }
 
+func (ctl *User) Ping(c *gin.Context) {
+	response.Success(c, "success")
+}
+
 func (ctl *User) GetUser(c *gin.Context) {
 	req := userValidator.GetReq{}
 	if err := c.ShouldBindQuery(&req); err != nil {

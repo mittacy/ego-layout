@@ -53,7 +53,7 @@ var (
 	JsonMarshalErrLog = std.JsonMarshalErrLog
 	CacheErrLog       = std.CacheErrLog
 	MysqlErrLog       = std.MysqlErrLog
-	BizErrorLog            = std.BizErrorLog
+	BizErrorLog       = std.BizErrorLog
 )
 
 var std = initStd()

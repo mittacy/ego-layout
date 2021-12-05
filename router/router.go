@@ -12,6 +12,6 @@ func InitRouter(r *gin.Engine) {
 	globalPath := "/api"
 	g := r.Group(globalPath)
 	{
-		g.GET("/user", User.GetUser)
+		g.GET("/user/ping", User.Ping)
 	}
 }
