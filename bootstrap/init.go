@@ -28,7 +28,7 @@ func Init() {
 	// 命令行参数覆盖env配置
 	viper.Set("APP_PORT", *serverPort)
 	if *serverEnv != "" {
-		viper.GetString("APP_ENV")
+		viper.Set("APP_ENV", *serverEnv)
 	}
 
 	// 2. 设置GIN运行模式
