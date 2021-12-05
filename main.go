@@ -3,8 +3,6 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/mittacy/ego-layout/app/api"
-	"github.com/mittacy/ego-layout/app/job"
-	"github.com/mittacy/ego-layout/app/task"
 	"github.com/mittacy/ego-layout/bootstrap"
 	"github.com/mittacy/ego-layout/pkg/log"
 	"github.com/mittacy/ego-layout/router"
@@ -15,13 +13,13 @@ func init() {
 }
 
 func main() {
-	done := make(chan error, 2)
+	done := make(chan error, 1) // 启动监听服务数
 	stop := make(chan struct{})
 
 	// 启动异步任务服务
-	go func() {
-		done <- job.Serve(stop)
-	}()
+	//go func() {
+	//	done <- job.Serve(stop)
+	//}()
 
 	// 启动API服务
 	go func() {
@@ -32,7 +30,7 @@ func main() {
 		router.InitRouter(r)
 		router.InitAdminRouter(r)
 
-		task.StartTasks()
+		//task.StartTasks()	// 启动定时任务
 
 		done <- api.GraceServe(r, stop)
 	}()
