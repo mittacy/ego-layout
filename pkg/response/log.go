@@ -12,13 +12,13 @@ import (
 // targetErr 可能的业务错误
 // - 如果是这些错误，将响应错误的提示信息
 // - 如果不是这些错误，将记录日志并响应未知错误
-func CheckErrAndLog(c *gin.Context, logger *log.Logger, title string, sourceErr error, targetErr ...error) {
+func CheckErrAndLog(c *gin.Context, logger *log.Logger, req interface{}, title string, sourceErr error, targetErr ...error) {
 	if isErr(sourceErr, targetErr...) {
 		FailErr(c, sourceErr)
 		return
 	}
 
-	logger.BizErrorLog(title, sourceErr)
+	logger.BizErrorLog(title, sourceErr, req)
 	Unknown(c)
 	return
 }

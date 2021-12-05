@@ -19,11 +19,11 @@ func NewUser(logger *log.Logger) User {
 
 // GetUserReply 用户详情响应
 // @param data 数据库数据
-func (ctl *User) GetUserReply(c *gin.Context, data *model.User) {
+func (ctl *User) GetUserReply(c *gin.Context, req interface{}, data *model.User) {
 	replyUser := userValidator.GetReply{}
 
 	if err := copier.Copy(&replyUser, data); err != nil {
-		ctl.logger.CopierErrLog(err)
+		ctl.logger.CopierErrLog(err, req)
 		response.Unknown(c)
 		return
 	}

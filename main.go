@@ -41,7 +41,7 @@ func main() {
 	var stopped bool
 	for i := 0; i < cap(done); i++ {
 		if err := <-done; err != nil {
-			log.BizErrorLog("服务异常退出", err)
+			log.Errorf("服务异常退出, err: %s", err)
 		}
 
 		if !stopped {

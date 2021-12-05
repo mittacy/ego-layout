@@ -89,12 +89,12 @@ func TestBizLog(t *testing.T) {
 	// 打印日志
 	bizLog := NewWithLevel("testBiz", zapcore.InfoLevel, zap.AddStacktrace(zapcore.WarnLevel))
 
-	bizLog.CopierErrLog(errors.New("copier error message"))
-	bizLog.TransformErrLog(errors.New("transform error message"))
-	bizLog.JsonMarshalErrLog(errors.New("json marshal error message"))
-	bizLog.CacheErrLog(errors.New("cache error message"))
-	bizLog.MysqlErrLog(errors.New("mysql error message"))
-	bizLog.UnknownErrLog(errors.New("unknown error message"))
+	bizLog.CopierErrLog(errors.New("copier error message"), nil)
+	bizLog.TransformErrLog(errors.New("transform error message"), nil)
+	bizLog.JsonMarshalErrLog(errors.New("json marshal error message"), nil)
+	bizLog.CacheErrLog(errors.New("cache error message"), nil)
+	bizLog.MysqlErrLog(errors.New("mysql error message"), nil)
+	bizLog.UnknownErrLog(errors.New("unknown error message"), nil)
 }
 
 func TestConsoleLog(t *testing.T) {
@@ -113,9 +113,9 @@ func TestConsoleLog(t *testing.T) {
 	// 打印日志
 	bizLog := NewWithLevel("testBiz", zapcore.InfoLevel, zap.AddStacktrace(zapcore.WarnLevel))
 
-	bizLog.CopierErrLog(errors.New("copier error message"))
-	bizLog.TransformErrLog(errors.New("transform error message"))
-	bizLog.JsonMarshalErrLog(errors.New("json marshal error message"))
-	bizLog.CacheErrLog(errors.New("cache error message"))
-	bizLog.MysqlErrLog(errors.New("mysql error message"))
+	bizLog.CopierErrLog(errors.New("copier error message"), nil)
+	bizLog.TransformErrLog(errors.New("transform error message"), nil)
+	bizLog.JsonMarshalErrLog(errors.New("json marshal error message"), nil)
+	bizLog.CacheErrLog(errors.New("cache error message"), nil)
+	bizLog.MysqlErrLog(errors.New("mysql error message"), nil)
 }
