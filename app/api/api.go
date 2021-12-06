@@ -35,8 +35,8 @@ func GraceServe(r *gin.Engine, stop <-chan struct{}) error {
 	return server.ListenAndServe()
 }
 
-// serve 启动服务
-func serve(r *gin.Engine, stop <-chan struct{}) error {
+// Serve 启动服务
+func Serve(r *gin.Engine, stop <-chan struct{}) error {
 	s := &http.Server{
 		Addr:           ":" + viper.GetString("APP_PORT"),
 		Handler:        r,
