@@ -24,7 +24,7 @@ func TestGet(t *testing.T) {
 	}
 
 	tags := Tags{}
-	if err := Decode(res, &tags); err != nil {
+	if err := Decode(res, &tags, nil); err != nil {
 		t.Error(err)
 	}
 
@@ -47,7 +47,7 @@ func TestGetParams(t *testing.T) {
 	}
 
 	tags := Tags{}
-	if err := Decode(res, &tags); err != nil {
+	if err := Decode(res, &tags, nil); err != nil {
 		t.Error(err)
 	}
 
