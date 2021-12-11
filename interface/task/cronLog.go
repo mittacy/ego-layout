@@ -17,4 +17,3 @@ func (c *cronLog) Error(err error, msg string, keysAndValues ...interface{}) {
 	keysAndValues = append(errPair, keysAndValues...)
 	c.l.Errorw(msg, keysAndValues...)
 }
-

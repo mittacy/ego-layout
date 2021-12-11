@@ -7,6 +7,7 @@ import (
 	"github.com/hibiken/asynq"
 	"github.com/mittacy/ego-layout/pkg/async"
 	"github.com/mittacy/ego-layout/pkg/log"
+	"time"
 )
 
 func NewProcessor() *Processor {
@@ -28,6 +29,8 @@ func (processor *Processor) ProcessTask(ctx context.Context, t *asynq.Task) erro
 
 	// do work...
 	processor.l.Infof("数据: %+v", p)
+	time.Sleep(time.Second)
+	processor.l.Infof("done")
 
 	return nil
 }

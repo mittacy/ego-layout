@@ -19,10 +19,11 @@ docs：http://www.mittacy.com/column/1633512445750
     1. 调用 validator 层的请求结构体，解析请求参数，如果失败直接返回结果；
     2. 调用一个或多个 service 服务，获得返回结果；
     3. 调用 transform 对响应数据进行处理，然后响应给前端
-- service 层：service 包含一个或多个 data
+- service 层：service 包含 data 以及其他 service，**注意不要循环造成调用服务**
     1. 处理各种逻辑
-    2. 调用一个或多个 data 方法存储或查询数据
+    2. 调用 data 方法存储或查询数据 或者 调用其他 service 完成操作
 - data 层：包含db、cache、http远程调用服务等，涉及数据的查询和持久化都应该在该层实现
+- model 层：定义数据库结构体、http远程调用响应结构体……
 
 
 ### 2. 项目结构
@@ -52,25 +53,31 @@ docs：http://www.mittacy.com/column/1633512445750
 │       ├── log.go
 │       ├── response.go
 │       └── validator.go
-├── app							# 对外服务
-│   ├── adminApi				# 高级权限路由
+├── cmd							# 服务
+│   ├── api						# API监听服务
+│   │   └── main.go
+│   └── job						# 流式任务处理服务
+│       └── main.go
+├── interface				    # 对外服务
+│   ├── api						# API控制器
 │   │   └── user.go
-│   ├── api						# 普通权限路由
-│   │   └── user.go
-│   ├── job						# 流式任务处理
+│   ├── job						# 流式任务
+│   │   └── exampleJob
+│   │       ├── processor.go	# 任务处理器
+│   │       └── task.go			# 生成任务
 │   └── task					# 定时任务
 ├── internal					# 内部服务
 │   └── validator				# 数据请求、响应结构体定义以及参数校验
-│       └── userValidator
-│           └── user.go
+│   │   └── userValidator
+│   │       └── user.go
 │   ├── transform				# 响应数据处理、封装
-│       └── user.go
+│   │   └── user.go
 │   ├── service					# 服务层，处理逻辑
-│       └── user.go
+│   │   └── user.go
 │   ├── data					# 数据查询、存储层
-│       └── user.go
-│   ├── model					# 定义与数据库的映射结构体
-│       └── user.go
+│   │   └── user.go
+│   └── model					# 定义与数据库的映射结构体
+│       └── user.go
 ├── middleware              	# 中间件
 └── router						# 路由
 │   ├── admin.go
@@ -103,7 +110,12 @@ docs：http://www.mittacy.com/column/1633512445750
 ```shell
 $ cd myProjectName
 $ go mod download
-$ go run main.go -config .env.development -env development -port 8080
+
+# 运行流式处理任务
+$ go run cmd/job/main.go -config .env.development -env development -port 8080
+
+# 运行API监听服务
+$ go run cmd/api/main.go -config .env.development -env development -port 8080
 ```
 
 > -config 参数，配置文件路径，默认为 `./.env.development`
@@ -132,13 +144,17 @@ ENV = release
 $ make clean
 
 # 启动服务
-$ make start
+$ make job-start
+$ make api-start
 
-# 优雅重启服务，不间断服务，脚本中的xargs命令格式只支持在 linux 运行
-$ make restart
+# 优雅重启服务，不中断服务
+$ make api-restart
+# job任务需要中断重启
+$ make job-restart
 
-# 停止服务，脚本中的xargs命令格式只支持在 linux 运行
-$ make stop
+# 停止服务
+$ make api-stop
+$ make job-stop
 ```
 
 ### 4. 生成业务框架代码
@@ -162,5 +178,8 @@ $ ego tpl data article
 
 # 创建定时任务 task 代码模板
 $ ego tpl task notice
+
+# 创建异步任务 job 代码模板
+$ ego tpl job sendEmail
 ```
 

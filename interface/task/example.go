@@ -29,4 +29,3 @@ func (t *Example) Run() {
 	// do something
 	t.logger.Infow("Hello, this is the example task", "task", t.Name())
 }
-

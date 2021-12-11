@@ -2,7 +2,7 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/mittacy/ego-layout/app/api"
+	"github.com/mittacy/ego-layout/interface/api"
 )
 
 func InitRouter(r *gin.Engine) {

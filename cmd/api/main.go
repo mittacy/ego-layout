@@ -1,19 +1,49 @@
-package api
+package main
 
 import (
-	"context"
 	"github.com/fvbock/endless"
 	"github.com/gin-gonic/gin"
+	"github.com/mittacy/ego-layout/bootstrap"
+	"github.com/mittacy/ego-layout/interface/task"
 	"github.com/mittacy/ego-layout/pkg/log"
+	"github.com/mittacy/ego-layout/router"
 	"github.com/spf13/viper"
 	"net/http"
+	"strings"
 	"syscall"
 	"time"
 )
 
-// GraceServe 启动服务
+func init() {
+	bootstrap.Init()
+}
+
+func main() {
+	r := gin.New()
+	r.Use(gin.Recovery())
+
+	router.InitRequestLog(r)
+	router.InitRouter(r)
+	router.InitAdminRouter(r)
+
+	// 启动定时任务
+	go func() {
+		task.StartTasks()
+	}()
+
+	// 启动API服务
+	if err := graceServe(r); err != nil {
+		if strings.Contains(err.Error(), "use of closed network connection") {
+			log.Infof("执行了kill端口")
+		} else {
+			log.Panicf("API服务异常退出: %+v", err)
+		}
+	}
+}
+
+// graceServe 启动服务
 // 支持平滑重启，重新编译生成同名可执行文件后，执行 kill -1 pid 即可平滑重启
-func GraceServe(r *gin.Engine, stop <-chan struct{}) error {
+func graceServe(r *gin.Engine) error {
 	endless.DefaultReadTimeOut = time.Second * viper.GetDuration("APP_READ_TIMEOUT")
 	endless.DefaultWriteTimeOut = time.Second * viper.GetDuration("APP_WRITE_TIMEOUT")
 	endless.DefaultMaxHeaderBytes = 1 << 20
@@ -27,16 +57,11 @@ func GraceServe(r *gin.Engine, stop <-chan struct{}) error {
 
 	log.Sugar().Infof("监听端口%s", port)
 
-	go func() {
-		<-stop
-		server.Shutdown(context.Background())
-	}()
-
 	return server.ListenAndServe()
 }
 
-// Serve 启动服务
-func Serve(r *gin.Engine, stop <-chan struct{}) error {
+// serve 启动服务
+func serve(r *gin.Engine) error {
 	s := &http.Server{
 		Addr:           ":" + viper.GetString("APP_PORT"),
 		Handler:        r,
@@ -46,11 +71,6 @@ func Serve(r *gin.Engine, stop <-chan struct{}) error {
 	}
 
 	log.Sugar().Infof("监听端口%s", s.Addr)
-
-	go func() {
-		<-stop
-		s.Shutdown(context.Background())
-	}()
 
 	return s.ListenAndServe()
 }

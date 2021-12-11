@@ -1,10 +1,17 @@
-package job
+package main
 
 import (
 	"github.com/hibiken/asynq"
-	"github.com/mittacy/ego-layout/internal/job/exampleJob"
+	"github.com/mittacy/ego-layout/bootstrap"
+	"github.com/mittacy/ego-layout/interface/job/exampleJob"
 	"github.com/mittacy/ego-layout/pkg/async"
+	"github.com/mittacy/ego-layout/pkg/log"
+	"strings"
 )
+
+func init() {
+	bootstrap.Init()
+}
 
 type Job struct {
 	TypeName string
@@ -18,8 +25,7 @@ func Jobs() []Job {
 	}
 }
 
-// Serve 异步任务服务
-func Serve(stop <-chan struct{}) error {
+func main() {
 	jobs := Jobs()
 
 	srv := asynq.NewServer(
@@ -27,15 +33,16 @@ func Serve(stop <-chan struct{}) error {
 		async.GetDefaultServerConfig(),
 	)
 
-	go func() {
-		<-stop
-		srv.Shutdown()
-	}()
-
 	mux := asynq.NewServeMux()
 	for _, v := range jobs {
 		mux.Handle(v.TypeName, v.Handler)
 	}
 
-	return srv.Run(mux)
+	if err := srv.Run(mux); err != nil {
+		if strings.Contains(err.Error(), "use of closed network connection") {
+			log.Infof("执行了kill端口")
+		} else {
+			log.Panicf("队列服务异常退出: %+v", err)
+		}
+	}
 }
