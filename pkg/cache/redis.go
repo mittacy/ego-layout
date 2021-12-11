@@ -12,7 +12,7 @@ import (
 // @param db 使用哪个数据库
 // @return *redis.Client
 func NewClientByName(name string, db int) *redis.Client {
-	if conf, ok := cacheConfig[name]; ok {
+	if conf, ok := GetConfig(name); ok {
 		return NewClient(conf, db)
 	}
 

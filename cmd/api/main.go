@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/fvbock/endless"
 	"github.com/gin-gonic/gin"
-	"github.com/mittacy/ego-layout/bootstrap"
+	_ "github.com/mittacy/ego-layout/bootstrap"
 	"github.com/mittacy/ego-layout/interface/task"
 	"github.com/mittacy/ego-layout/pkg/log"
 	"github.com/mittacy/ego-layout/router"
@@ -13,10 +13,6 @@ import (
 	"syscall"
 	"time"
 )
-
-func init() {
-	bootstrap.Init()
-}
 
 func main() {
 	r := gin.New()

@@ -3,20 +3,18 @@ package bootstrap
 import (
 	"flag"
 	"github.com/gin-gonic/gin"
-	"github.com/mittacy/ego-layout/pkg/cache"
 	"github.com/mittacy/ego-layout/pkg/config"
 	"github.com/mittacy/ego-layout/pkg/log"
-	"github.com/mittacy/ego-layout/pkg/mysql"
 	"github.com/mittacy/ego-layout/utils/serverUtil"
 	"github.com/spf13/viper"
 	"go.uber.org/zap/zapcore"
 )
 
-func Init() {
+func init() {
 	/* 环境变量解析
-	 	-config 配置文件路径 example: ./.env.development
-		-port 服务监听端口 example: 10244
-		-env 服务监听端口 example: development/test/production
+	 	-config 配置文件路径 example: -config ./.env.development
+		-port 服务监听端口 example: -port 10244
+		-env 服务监听端口 example: -env development/test/production
 	*/
 	configPath := flag.String("config", ".env.development", "配置文件名")
 	serverEnv := flag.String("env", "", "服务环境")
@@ -56,10 +54,4 @@ func Init() {
 		log.WithLogInConsole(logInConsole),
 		log.WithGlobalFields(globalFields...),
 		log.WithGlobalEncoderJSON(logEncoderJson))
-
-	// 4. 初始化Mysql配置
-	mysql.InitConfig()
-
-	// 5. 初始化缓存配置
-	cache.InitConfig()
 }

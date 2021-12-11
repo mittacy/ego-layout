@@ -10,37 +10,36 @@ import (
 	"github.com/mittacy/ego-layout/pkg/response"
 )
 
-type User struct {
-	service   service.User
-	transform transform.User
-	logger    *log.Logger
-}
+var User userApi
 
-func NewUser() User {
+func init() {
 	l := log.New("user")
-	return User{
-		logger:    l,
-		service:   service.NewUser(l),
-		transform: transform.NewUser(l),
+
+	User = userApi{
+		logger: l,
 	}
 }
 
-func (ctl *User) Ping(c *gin.Context) {
+type userApi struct {
+	logger *log.Logger
+}
+
+func (ctl *userApi) Ping(c *gin.Context) {
 	response.Success(c, "success")
 }
 
-func (ctl *User) GetUser(c *gin.Context) {
+func (ctl *userApi) GetUser(c *gin.Context) {
 	req := userValidator.GetReq{}
 	if err := c.ShouldBindQuery(&req); err != nil {
 		response.ValidateErr(c, err)
 		return
 	}
 
-	user, err := ctl.service.GetUserById(req.Id)
+	user, err := service.User.GetById(req.Id)
 	if err != nil {
 		response.CheckErrAndLog(c, ctl.logger, req, "get user", err, apierr.ErrUserNoExist)
 		return
 	}
 
-	ctl.transform.GetUserReply(c, req, user)
+	transform.User.GetUserReply(c, req, user)
 }

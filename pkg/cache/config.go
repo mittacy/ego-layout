@@ -8,16 +8,19 @@ type Conf struct {
 	Port     int
 }
 
-var (
-	cacheConfig map[string]Conf
-)
+func GetConfig(name string) (Conf, bool) {
+	var conf Conf
 
-func InitConfig() {
-	cacheConfig = map[string]Conf{
-		"localhost": {
+	switch name {
+	case "localhost":
+		conf = Conf{
 			Host:     viper.GetString("REDIS_LOCALHOST_RW_HOST"),
-			Port:     viper.GetInt("REDIS_LOCALHOST_RW_PORT"),
 			Password: viper.GetString("REDIS_LOCALHOST_RW_PASSWORD"),
-		},
+			Port:     viper.GetInt("REDIS_LOCALHOST_RW_PORT"),
+		}
+	default:
+		return Conf{}, false
 	}
+
+	return conf, true
 }

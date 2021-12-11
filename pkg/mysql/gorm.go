@@ -27,7 +27,7 @@ func init() {
 // @return *gorm.DB
 // @return error
 func NewClientByName(name string) *gorm.DB {
-	if conf, ok := dbConfig[name]; ok {
+	if conf, ok := GetConfig(name); ok {
 		return NewClient(conf)
 	}
 

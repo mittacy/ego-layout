@@ -6,12 +6,9 @@ import (
 )
 
 func InitRouter(r *gin.Engine) {
-	// 控制器
-	User := api.NewUser()
-
 	globalPath := "/api"
 	g := r.Group(globalPath)
 	{
-		g.GET("/user/ping", User.Ping)
+		g.GET("/user/ping", api.User.Ping)
 	}
 }

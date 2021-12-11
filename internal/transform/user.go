@@ -9,17 +9,23 @@ import (
 	"github.com/mittacy/ego-layout/pkg/response"
 )
 
-type User struct {
+var User userTransform
+
+type userTransform struct {
 	logger *log.Logger
 }
 
-func NewUser(logger *log.Logger) User {
-	return User{logger: logger}
+func init() {
+	l := log.New("user")
+
+	User = userTransform{
+		logger: l,
+	}
 }
 
 // GetUserReply 用户详情响应
 // @param data 数据库数据
-func (ctl *User) GetUserReply(c *gin.Context, req interface{}, data *model.User) {
+func (ctl *userTransform) GetUserReply(c *gin.Context, req interface{}, data *model.User) {
 	replyUser := userValidator.GetReply{}
 
 	if err := copier.Copy(&replyUser, data); err != nil {

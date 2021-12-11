@@ -116,6 +116,9 @@ $ go run cmd/job/main.go -config .env.development -env development -port 8080
 
 # 运行API监听服务
 $ go run cmd/api/main.go -config .env.development -env development -port 8080
+
+$ curl localhost:8080/api/user/ping
+{"code":0,"data":"success","msg":"success"}
 ```
 
 > -config 参数，配置文件路径，默认为 `./.env.development`
@@ -146,6 +149,9 @@ $ make clean
 # 启动服务
 $ make job-start
 $ make api-start
+
+$ curl localhost:10244/api/user/ping
+{"code":0,"data":"success","msg":"success"}
 
 # 优雅重启服务，不中断服务
 $ make api-restart

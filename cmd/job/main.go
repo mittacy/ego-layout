@@ -2,16 +2,12 @@ package main
 
 import (
 	"github.com/hibiken/asynq"
-	"github.com/mittacy/ego-layout/bootstrap"
+	_ "github.com/mittacy/ego-layout/bootstrap"
 	"github.com/mittacy/ego-layout/interface/job/exampleJob"
 	"github.com/mittacy/ego-layout/pkg/async"
 	"github.com/mittacy/ego-layout/pkg/log"
 	"strings"
 )
-
-func init() {
-	bootstrap.Init()
-}
 
 type Job struct {
 	TypeName string

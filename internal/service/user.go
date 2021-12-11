@@ -6,18 +6,20 @@ import (
 	"github.com/mittacy/ego-layout/pkg/log"
 )
 
-type User struct {
-	data   data.User
-	logger *log.Logger
-}
+var User userService
 
-func NewUser(logger *log.Logger) User {
-	return User{
-		data:   data.NewUser(logger),
-		logger: logger,
+func init() {
+	l := log.New("user")
+
+	User = userService{
+		logger: l,
 	}
 }
 
-func (ctl *User) GetUserById(id int64) (*model.User, error) {
-	return ctl.data.GetById(id)
+type userService struct {
+	logger *log.Logger
+}
+
+func (ctl *userService) GetById(id int64) (*model.User, error) {
+	return data.User.GetById(id)
 }

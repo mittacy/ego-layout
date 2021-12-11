@@ -11,18 +11,21 @@ type Conf struct {
 	Params   string
 }
 
-var (
-	dbConfig map[string]Conf
-)
+func GetConfig(name string) (Conf, bool) {
+	var conf Conf
 
-func InitConfig() {
-	dbConfig = map[string]Conf{
-		"localhost": {
+	switch name {
+	case "localhost":
+		conf = Conf{
 			Host:     viper.GetString("DB_CORE_RW_HOST"),
 			Port:     viper.GetInt("DB_CORE_RW_PORT"),
 			Database: viper.GetString("DB_DATABASE_RESOURCES"),
 			User:     viper.GetString("DB_CORE_RW_USERNAME"),
 			Password: viper.GetString("DB_CORE_RW_PASSWORD"),
-		},
+		}
+	default:
+		return Conf{}, false
 	}
+
+	return conf, true
 }
