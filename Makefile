@@ -3,40 +3,67 @@ SERVER = ego-layout
 CONFIG = .env.development
 PORT = 10244
 ENV = production
+APIUniqueId = $(SERVER)-$(PORT)-api
+JobUniqueId = $(SERVER)-$(PORT)-job
 
 all: start
 
-build:
+api-build:
 	@echo "building..."
-	@go build -o $(SERVER) main.go
+	@go build -o $(APIUniqueId) cmd/api/main.go
 	@echo "build success"
+
+job-build:
+	@echo "building..."
+	@go build -o $(JobUniqueId) cmd/job/main.go
+	@echo "build success"
+
+api-start:
+	@make api-build
+	@echo "starting..."
+	@nohup ./$(APIUniqueId) -config $(CONFIG) -port $(PORT) -env $(ENV) >> .nohup.log 2>&1 &
+	@echo "start success"
+
+job-start:
+	@make job-build
+	@echo "starting..."
+	@nohup ./$(JobUniqueId) -config $(CONFIG) -port $(PORT) -env $(ENV) >> .nohup.log 2>&1 &
+	@echo "start success"
+
+api-stop:
+	@echo "stopping..."
+	@ps aux | grep "$(APIUniqueId)" | grep -v grep | awk '{print $$2}' | xargs -I {} kill -15 {}
+	@echo "stop success"
+
+job-stop:
+	@echo "stopping..."
+	@ps aux | grep "$(JobUniqueId)" | grep -v grep | awk '{print $$2}' | xargs -I {} kill -15 {}
+	@echo "stop success"
+
+api-restart:
+	@make api-build
+	@echo "restarting..."
+	@ps aux | grep "$(APIUniqueId)" | grep -v grep | awk '{print $$2}' | xargs -I {} kill -1 {}
+	@echo "restart success"
+
+job-restart:
+	@make job-stop
+	@make job-start
 
 clean:
 	@echo "cleaning..."
-	@rm -rf $(SERVER)
+	@rm -rf $(APIUniqueId)
+	@rm -rf $(JobUniqueId)
 	@go clean -i .
 	@echo "clean success"
 
-start:
-	@make build
-	@echo "starting..."
-	@nohup ./$(SERVER) -config $(CONFIG) -port $(PORT) -env $(ENV) > nohup.log 2>&1 &
-	@echo "start success"
-
-restart:
-	@make build
-	@echo "restarting..."
-	@ps aux | grep "$(PORT)" | grep -v grep | awk '{print $$2}' | xargs -I {} kill -1 {}
-	@echo "restart success"
-
-stop:
-	@echo "stopping..."
-	@ps aux | grep "$(PORT)" | grep -v grep | awk '{print $$2}' | xargs -I {} kill -9 {}
-	@echo "stop success"
-
 help:
-	@echo "make build: compile packages and dependencies"
 	@echo "make clean: remove object files and cached files"
-	@echo "make start: make build and start service"
-	@echo "make restart: make build and then grace restart service"
-	@echo "make stop: grace stop service"
+	@echo "make api-build: compile api packages and dependencies"
+	@echo "make api-start: make build and start api service"
+	@echo "make api-restart: make build and then grace restart api service"
+	@echo "make api-stop: grace stop api service"
+	@echo "make job-build: compile job packages and dependencies"
+	@echo "make job-start: make build and start job service"
+	@echo "make job-restart: make build and then grace restart job service"
+	@echo "make job-stop: grace stop job service"
