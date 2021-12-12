@@ -4,14 +4,16 @@ import (
 	"github.com/go-resty/resty/v2"
 	"github.com/mittacy/ego-layout/pkg/log"
 	"github.com/pkg/errors"
-	"sync"
 	"time"
 )
 
 var (
-	logInitOnce sync.Once
-	logger      *log.Logger
+	logger *log.Logger
 )
+
+func init() {
+	logger = log.New("resty_request")
+}
 
 // Get GET请求，返回数据为map结构
 // @param host 域名，example: https://www.baidu.com
@@ -21,10 +23,6 @@ var (
 // @return int 返回的业务状态码
 // @return error
 func Get(host, uri string, timeout time.Duration) (map[string]interface{}, int, error) {
-	logInitOnce.Do(func() {
-		logger = log.New("resty_request")
-	})
-
 	url := fullUrl(host, uri)
 
 	client := resty.New().SetTimeout(timeout)
@@ -60,10 +58,6 @@ func Get(host, uri string, timeout time.Duration) (map[string]interface{}, int, 
 // @return int 返回的业务状态码
 // @return error
 func GetParams(host, uri string, params map[string]string, timeout time.Duration) (map[string]interface{}, int, error) {
-	logInitOnce.Do(func() {
-		logger = log.New("resty_request")
-	})
-
 	url := fullUrl(host, uri)
 
 	client := resty.New().SetTimeout(timeout)
@@ -99,10 +93,6 @@ func GetParams(host, uri string, params map[string]string, timeout time.Duration
 // @return int 返回的业务状态码
 // @return error
 func Post(host, uri string, body interface{}, timeout time.Duration) (map[string]interface{}, int, error) {
-	logInitOnce.Do(func() {
-		logger = log.New("resty_request")
-	})
-
 	url := fullUrl(host, uri)
 
 	client := resty.New().SetTimeout(timeout)

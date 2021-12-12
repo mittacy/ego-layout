@@ -1,10 +1,11 @@
-package exampleJob
+package exampleJobProcessor
 
 import (
 	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/hibiken/asynq"
+	"github.com/mittacy/ego-layout/interface/job/exampleJob/exampleJobTask"
 	"github.com/mittacy/ego-layout/pkg/async"
 	"github.com/mittacy/ego-layout/pkg/log"
 	"time"
@@ -22,7 +23,7 @@ type Processor struct {
 }
 
 func (processor *Processor) ProcessTask(ctx context.Context, t *asynq.Task) error {
-	var p Payload
+	var p exampleJobTask.Payload
 	if err := json.Unmarshal(t.Payload(), &p); err != nil {
 		return fmt.Errorf("json.Unmarshal failed: %v: %w", err, asynq.SkipRetry)
 	}

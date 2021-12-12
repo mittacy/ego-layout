@@ -3,7 +3,8 @@ package main
 import (
 	"github.com/hibiken/asynq"
 	_ "github.com/mittacy/ego-layout/bootstrap"
-	"github.com/mittacy/ego-layout/interface/job/exampleJob"
+	"github.com/mittacy/ego-layout/interface/job/exampleJob/exampleJobProcessor"
+	"github.com/mittacy/ego-layout/interface/job/exampleJob/exampleJobTask"
 	"github.com/mittacy/ego-layout/pkg/async"
 	"github.com/mittacy/ego-layout/pkg/log"
 	"strings"
@@ -17,7 +18,7 @@ type Job struct {
 // Jobs 异步任务列表，新增的任务在此添加即可
 func Jobs() []Job {
 	return []Job{
-		{exampleJob.TypeName, exampleJob.NewProcessor()},
+		{exampleJobTask.TypeName, exampleJobProcessor.NewProcessor()},
 	}
 }
 

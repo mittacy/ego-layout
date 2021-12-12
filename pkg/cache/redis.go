@@ -16,7 +16,7 @@ func NewClientByName(name string, db int) *redis.Client {
 		return NewClient(conf, db)
 	}
 
-	log.Panicf("%s 配置不存在, 请在 cacheConfig 中配置", name)
+	log.Panicf("%s 配置不存在, 请在 pkg/cache/config.go GetConfig() 中配置", name)
 	return nil
 }
 

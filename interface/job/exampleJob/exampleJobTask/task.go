@@ -1,4 +1,4 @@
-package exampleJob
+package exampleJobTask
 
 import (
 	"encoding/json"

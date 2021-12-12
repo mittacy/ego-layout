@@ -89,11 +89,21 @@ docs：http://www.mittacy.com/column/1633512445750
 
 ## 快速开始
 
-### 1. 前期准备
+### 1. 环境准备
 
-+ 安装go环境，version >= 1.15
-+ 安装Mysql（如果需要）
-+ 安装Redis（如果需要）
+需要提前安装好对应的依赖环境以及工具：‌
+
+- 安装go环境，version >= 1.16
+- 安装Mysql（如果需要）
+- 安装Redis（如果需要）
+
+建议开启GO111MODULE
+
+```shell
+$ go env -w GO111MODULE=on
+```
+
+如果拉取依赖遇到网络问题，建议[配置GOPROXY](https://goproxy.cn/)‌
 
 ### 2. 修改配置信息
 

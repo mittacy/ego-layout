@@ -31,7 +31,7 @@ func NewClientByName(name string) *gorm.DB {
 		return NewClient(conf)
 	}
 
-	log.Panicf("%s 配置不存在, 请在 dbConfig 中配置", name)
+	log.Panicf("%s 配置不存在, 请在 pkg/mysql/config.go GetConfig() 中配置", name)
 	return nil
 }
 
