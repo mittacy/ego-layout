@@ -44,7 +44,7 @@ func init() {
 		{
 			Key:    "module_name",
 			Type:   zapcore.StringType,
-			String: "serverName",
+			String: viper.GetString("APP_NAME"),
 		},
 	}
 
