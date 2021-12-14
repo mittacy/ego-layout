@@ -9,6 +9,7 @@ import (
 	"github.com/mittacy/ego-layout/router"
 	"github.com/spf13/viper"
 	"net/http"
+	"runtime"
 	"strings"
 	"syscall"
 	"time"
@@ -27,8 +28,16 @@ func main() {
 		task.StartTasks()
 	}()
 
+	// Windows不支持信号量无法使用endless自动重启，使用普通服务
+	var server func(r *gin.Engine) error
+	if runtime.GOOS == "windows" {
+		server = serve
+	} else {
+		server = graceServe
+	}
+
 	// 启动API服务
-	if err := graceServe(r); err != nil {
+	if err := server(r); err != nil {
 		if strings.Contains(err.Error(), "use of closed network connection") {
 			log.Infof("执行了kill端口")
 		} else {
