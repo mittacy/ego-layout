@@ -11,12 +11,15 @@ import (
 	"gorm.io/gorm"
 )
 
-var User userData
+type User struct {
+	db          *gorm.DB
+	cache       *redis.Client
+	cacheKeyPre string
+	logger      *log.Logger
+}
 
-func init() {
-	l := log.New("user")
-
-	User = userData{
+func NewUser(l *log.Logger) User {
+	return User{
 		db:          mysql.NewClientByName("localhost"),
 		cache:       cache.NewClientByName("localhost", 0),
 		cacheKeyPre: fmt.Sprintf("%s:user", viper.GetString("APP_NAME")),
@@ -24,14 +27,7 @@ func init() {
 	}
 }
 
-type userData struct {
-	db          *gorm.DB
-	cache       *redis.Client
-	cacheKeyPre string
-	logger      *log.Logger
-}
-
-func (ctl *userData) GetById(id int64) (*model.User, error) {
+func (ctl *User) GetById(id int64) (*model.User, error) {
 	//user := model.User{}
 	//if err := ctl.db.Where("id = ?", id).First(&user).Error; err != nil {
 	//	if errors.Is(err, gorm.ErrRecordNotFound) {

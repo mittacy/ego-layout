@@ -13,13 +13,15 @@ func init() {
 
 	User = userService{
 		logger: l,
+		data: data.NewUser(l),
 	}
 }
 
 type userService struct {
 	logger *log.Logger
+	data   data.User
 }
 
 func (ctl *userService) GetById(id int64) (*model.User, error) {
-	return data.User.GetById(id)
+	return ctl.data.GetById(id)
 }
