@@ -2,26 +2,22 @@ package data
 
 import (
 	"fmt"
-	"github.com/go-redis/redis/v8"
 	"github.com/mittacy/ego-layout/internal/model"
-	"github.com/mittacy/ego-layout/pkg/cache"
 	"github.com/mittacy/ego-layout/pkg/log"
-	"github.com/mittacy/ego-layout/pkg/mysql"
 	"github.com/spf13/viper"
-	"gorm.io/gorm"
 )
 
 type User struct {
-	db          *gorm.DB
-	cache       *redis.Client
+	//db          *gorm.DB
+	//cache       *redis.Client
 	cacheKeyPre string
 	logger      *log.Logger
 }
 
 func NewUser(l *log.Logger) User {
 	return User{
-		db:          mysql.NewClientByName("localhost"),
-		cache:       cache.NewClientByName("localhost", 0),
+		//db:          mysql.NewClientByName("localhost"),
+		//cache:       cache.NewClientByName("localhost", 0),
 		cacheKeyPre: fmt.Sprintf("%s:user", viper.GetString("APP_NAME")),
 		logger:      l,
 	}
