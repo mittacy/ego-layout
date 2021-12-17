@@ -13,3 +13,8 @@ type User struct {
 func (*User) TableName() string {
 	return "user"
 }
+
+const (
+	// 状态
+	UserStateDeleted = 100	// 删除
+)
