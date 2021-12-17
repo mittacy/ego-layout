@@ -1,6 +1,6 @@
-## ego layout
+## ego-layout
 
-docs：http://www.mittacy.com/column/1633512445750
+开发文档：http://www.mittacy.com/column/1633512445750
 
 本项目是对 Gin 的二次封装，便于快速开发业务服务
 
