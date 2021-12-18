@@ -109,15 +109,21 @@ func ResetDefault(l *Logger) {
 	BizErrorLog = std.BizErrorLog
 }
 
+var logPool = map[string]*Logger{}
+
 // New 创建新日志文件句柄
 // @param logName 日志名
-// @param opts 日志配置选项
 // @return *Logger
-func New(logName string, opts ...zap.Option) *Logger {
+func New(logName string) *Logger {
 	// 日志名检查
 	logName = strings.TrimSpace(logName)
 	if logName == "" {
-		panic("the log file name is empty")
+		std.Error("create: the input log name cannot empty")
+		return nil
+	}
+
+	if log, ok := logPool[logName]; ok && log != nil {
+		return log
 	}
 
 	file, err := os.OpenFile(getLogPath(logName), os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
@@ -125,7 +131,10 @@ func New(logName string, opts ...zap.Option) *Logger {
 		panic(err)
 	}
 
-	return newWithWriter(file, zapcore.DebugLevel, opts...)
+	log := newWithWriter(file, zapcore.DebugLevel)
+	logPool[logName] = log
+
+	return log
 }
 
 // NewWithLevel 创建新日志文件句柄,自定义最低日志级别
