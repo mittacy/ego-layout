@@ -12,7 +12,7 @@ var (
 )
 
 func init() {
-	logger = log.New("resty_request")
+	logger = log.New("resty_http")
 }
 
 // Get GET请求，返回数据为map结构
@@ -29,24 +29,22 @@ func Get(host, uri string, timeout time.Duration) (map[string]interface{}, int, 
 	res := Reply{}
 
 	resp, err := client.R().SetResult(&res).ForceContentType("application/json").Get(url)
-	logger.Infow(host+uri, "res", resp)
-
 	if err != nil {
+		logger.Errorw(host+uri, "res", resp, "err", err)
 		return nil, 0, errors.WithStack(err)
+	} else {
+		logger.Infow(host+uri, "res", resp)
 	}
+
 	if !resp.IsSuccess() {
-		err = errors.New(resp.String())
-		return nil, 0, err
+		return nil, 0, errors.New(resp.String())
 	}
+
 	if res.Code != 0 {
 		return nil, res.Code, errors.New(res.Msg)
 	}
 
-	if v, ok := res.Data.(map[string]interface{}); ok {
-		return v, res.Code, nil
-	}
-
-	return map[string]interface{}{}, res.Code, nil
+	return resPackage(res), res.Code, nil
 }
 
 // GetParams GET请求，返回数据为map结构
@@ -64,24 +62,22 @@ func GetParams(host, uri string, params map[string]string, timeout time.Duration
 	res := Reply{}
 
 	resp, err := client.R().SetQueryParams(params).SetResult(&res).ForceContentType("application/json").Get(url)
-	logger.Infow(host+uri, "req", params, "res", resp)
-
 	if err != nil {
-		return nil, 0, err
+		logger.Errorw(host+uri, "res", resp, "err", err)
+		return nil, 0, errors.WithStack(err)
+	} else {
+		logger.Infow(host+uri, "res", resp)
 	}
+
 	if !resp.IsSuccess() {
-		err = errors.New(resp.String())
-		return nil, 0, err
+		return nil, 0, errors.New(resp.String())
 	}
+
 	if res.Code != 0 {
 		return nil, res.Code, errors.New(res.Msg)
 	}
 
-	if v, ok := res.Data.(map[string]interface{}); ok {
-		return v, res.Code, nil
-	}
-
-	return map[string]interface{}{}, res.Code, nil
+	return resPackage(res), res.Code, nil
 }
 
 // Post POST请求
@@ -103,26 +99,36 @@ func Post(host, uri string, body interface{}, timeout time.Duration) (map[string
 		SetBody(body).
 		SetResult(&res).
 		Post(url)
-	logger.Infow(host+uri, "req", body, "res", resp)
-
 	if err != nil {
-		return nil, 0, err
+		logger.Errorw(host+uri, "res", resp, "err", err)
+		return nil, 0, errors.WithStack(err)
+	} else {
+		logger.Infow(host+uri, "res", resp)
 	}
+
 	if !resp.IsSuccess() {
-		err = errors.New(resp.String())
-		return nil, 0, err
+		return nil, 0, errors.New(resp.String())
 	}
+
 	if res.Code != 0 {
 		return nil, res.Code, errors.New(res.Msg)
 	}
 
-	if v, ok := res.Data.(map[string]interface{}); ok {
-		return v, res.Code, nil
-	}
-
-	return map[string]interface{}{}, res.Code, nil
+	return resPackage(res), res.Code, nil
 }
 
 func fullUrl(host, uri string) string {
 	return host + uri
+}
+
+func resPackage(res Reply) map[string]interface{} {
+	// map直接返回
+	if v, ok := res.Data.(map[string]interface{}); ok {
+		return v
+	}
+
+	// 其他特殊类型包装
+	return map[string]interface{}{
+		"data": res.Data,
+	}
 }
