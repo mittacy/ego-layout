@@ -18,7 +18,7 @@ func CheckErrAndLog(c *gin.Context, logger *log.Logger, req interface{}, title s
 		return
 	}
 
-	logger.BizErrorLog(title, sourceErr, req)
+	logger.BizErrorLogWithTrace(c, title, sourceErr, req)
 	Unknown(c)
 	return
 }

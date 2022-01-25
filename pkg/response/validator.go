@@ -22,7 +22,7 @@ func ValidateErr(c *gin.Context, err error) {
 	errs, ok := err.(validator.ValidationErrors)
 	if !ok {
 		// 非validator错误
-		FailMsg(c, "json错误")
+		FailMsg(c, err.Error())
 		return
 	}
 

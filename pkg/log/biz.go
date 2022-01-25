@@ -44,6 +44,5 @@ func (l *Logger) UnknownErrLog(err error, req interface{}) {
 // @param err 错误，如果为github.com/pkg/errors类型包含错误堆栈，将会打印出堆栈信息
 // @param req 请求数据
 func (l *Logger) BizErrorLog(title string, err error, req interface{}) {
-	msg := fmt.Sprintf("%s: %s", title, err)
-	l.Errorw(msg, "req", fmt.Sprintf("%+v", req), "callstack", fmt.Sprintf("%+v", err))
+	l.Errorw(title, "req", req, "err", err, "callstack", fmt.Sprintf("%+v", err))
 }

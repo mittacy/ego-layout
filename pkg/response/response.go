@@ -13,9 +13,10 @@ import (
 // data 返回数据
 func Custom(c *gin.Context, httpCode, apiCode int, msg string, data interface{}) {
 	c.JSON(httpCode, gin.H{
-		"code": apiCode,
-		"msg":  msg,
-		"data": data,
+		"code":       apiCode,
+		"msg":        msg,
+		"data":       data,
+		"request_id": c.GetString("requestId"),
 	})
 }
 

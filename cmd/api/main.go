@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/mittacy/ego-layout/bootstrap"
 	"github.com/mittacy/ego-layout/interface/task"
+	"github.com/mittacy/ego-layout/middleware"
 	"github.com/mittacy/ego-layout/pkg/log"
 	"github.com/mittacy/ego-layout/router"
 	"github.com/spf13/viper"
@@ -18,6 +19,7 @@ import (
 func main() {
 	r := gin.New()
 	r.Use(gin.Recovery())
+	r.Use(middleware.RequestTrace())
 
 	router.InitRequestLog(r)
 	router.InitRouter(r)
