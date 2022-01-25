@@ -14,10 +14,10 @@ import (
 
 func main() {
 	r := gin.New()
-	r.Use(gin.Recovery())
+	r.Use(middleware.RecoveryWithZap(log.New("request"), true))
 	r.Use(middleware.RequestTrace())
+	r.Use(middleware.Ginzap(log.New("request"), time.RFC3339, true))
 
-	router.InitRequestLog(r)
 	router.InitRouter(r)
 	router.InitAdminRouter(r)
 
