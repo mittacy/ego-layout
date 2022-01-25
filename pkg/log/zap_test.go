@@ -8,6 +8,8 @@ import (
 )
 
 func TestDefault(t *testing.T) {
+	InitStd()
+
 	// 日志全局配置
 	globalFields := []zapcore.Field{
 		{
@@ -43,6 +45,8 @@ func TestDefault(t *testing.T) {
 }
 
 func TestNewLog(t *testing.T) {
+	InitStd()
+
 	// 日志全局配置
 	globalFields := []zapcore.Field{
 		{
@@ -74,6 +78,8 @@ func TestNewLog(t *testing.T) {
 }
 
 func TestBizLog(t *testing.T) {
+	InitStd()
+
 	// 日志全局配置
 	globalFields := []zapcore.Field{
 		{
@@ -98,6 +104,8 @@ func TestBizLog(t *testing.T) {
 }
 
 func TestConsoleLog(t *testing.T) {
+	InitStd()
+
 	// 日志全局配置
 	globalFields := []zapcore.Field{
 		{

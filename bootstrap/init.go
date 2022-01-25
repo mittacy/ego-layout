@@ -54,4 +54,5 @@ func init() {
 		log.WithLogInConsole(logInConsole),
 		log.WithGlobalFields(globalFields...),
 		log.WithGlobalEncoderJSON(logEncoderJson))
+	log.InitStd()
 }

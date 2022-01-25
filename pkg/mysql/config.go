@@ -19,7 +19,7 @@ func GetConfig(name string) (Conf, bool) {
 		conf = Conf{
 			Host:     viper.GetString("DB_CORE_RW_HOST"),
 			Port:     viper.GetInt("DB_CORE_RW_PORT"),
-			Database: viper.GetString("DB_DATABASE_RESOURCES"),
+			Database: "blog",
 			User:     viper.GetString("DB_CORE_RW_USERNAME"),
 			Password: viper.GetString("DB_CORE_RW_PASSWORD"),
 		}

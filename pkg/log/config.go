@@ -1,7 +1,9 @@
 package log
 
 import (
+	"fmt"
 	"go.uber.org/zap/zapcore"
+	"os"
 )
 
 var (
@@ -26,8 +28,14 @@ func SetGlobalConfig(options ...ConfigOption) {
 // @param path 路径
 func WithPath(path string) ConfigOption {
 	return func() {
+		if _, err := os.Stat(path); os.IsNotExist(err) {
+			if err := os.MkdirAll(path, 0700); err != nil {
+				fmt.Printf("log: create %s directory err: %s\n", path, err)
+			}
+		}
+
 		logPath = path
-		ResetDefault(initStd())
+		ResetDefault(InitStd())
 	}
 }
 
@@ -37,7 +45,7 @@ func WithPath(path string) ConfigOption {
 func WithLevel(l zapcore.Level) ConfigOption {
 	return func() {
 		globalLowLevel = l
-		ResetDefault(initStd())
+		ResetDefault(InitStd())
 	}
 }
 
@@ -47,7 +55,7 @@ func WithLevel(l zapcore.Level) ConfigOption {
 func WithLogInConsole(isLogInConsole bool) ConfigOption {
 	return func() {
 		logInConsole = isLogInConsole
-		ResetDefault(initStd())
+		ResetDefault(InitStd())
 	}
 }
 
@@ -56,7 +64,7 @@ func WithLogInConsole(isLogInConsole bool) ConfigOption {
 func WithGlobalFields(field ...zapcore.Field) ConfigOption {
 	return func() {
 		globalFields = append(globalFields, field...)
-		ResetDefault(initStd())
+		ResetDefault(InitStd())
 	}
 }
 
@@ -66,6 +74,6 @@ func WithGlobalFields(field ...zapcore.Field) ConfigOption {
 func WithGlobalEncoderJSON(isJSONEncoder bool) ConfigOption {
 	return func() {
 		jsonEncoder = isJSONEncoder
-		ResetDefault(initStd())
+		ResetDefault(InitStd())
 	}
 }

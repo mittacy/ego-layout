@@ -56,9 +56,9 @@ var (
 	BizErrorLog       = std.BizErrorLog
 )
 
-var std = initStd()
+var std *Logger
 
-func initStd() *Logger {
+func InitStd() *Logger {
 	return NewWithLevel("default", globalLowLevel, zap.AddStacktrace(zapcore.WarnLevel))
 }
 
