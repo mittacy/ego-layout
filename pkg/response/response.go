@@ -23,26 +23,26 @@ func Custom(c *gin.Context, httpCode, apiCode int, msg string, data interface{})
 // Success 成功响应
 // data 返回数据
 func Success(c *gin.Context, data interface{}) {
-	Custom(c, http.StatusOK, 0, "success", data)
+	Custom(c, http.StatusOK, apierr.Success.Code, "success", data)
 }
 
 // SuccessMsg 成功响应带消息提示
 // data 返回数据
 // msg 提示信息
 func SuccessMsg(c *gin.Context, data interface{}, msg string) {
-	Custom(c, http.StatusOK, 0, msg, data)
+	Custom(c, http.StatusOK, apierr.Success.Code, msg, data)
 }
 
 // Fail 失败响应
 // msg 提示信息
 func Fail(c *gin.Context) {
-	Custom(c, http.StatusOK, 1, "fail", struct{}{})
+	Custom(c, http.StatusOK, apierr.Param.Code, "fail", struct{}{})
 }
 
 // FailMsg 带自定义信息的失败响应
 // msg 自定义提示信息
 func FailMsg(c *gin.Context, msg string) {
-	Custom(c, http.StatusOK, 1, msg, struct{}{})
+	Custom(c, http.StatusOK, apierr.Param.Code, msg, struct{}{})
 }
 
 // FailErr 带有错误的失败响应
@@ -53,15 +53,15 @@ func FailErr(c *gin.Context, err error) {
 
 // Unknown 未知错误响应
 func Unknown(c *gin.Context) {
-	Custom(c, http.StatusInternalServerError, 500, "unknown Error", struct{}{})
+	Custom(c, http.StatusInternalServerError, apierr.Unknown.Code, apierr.Unknown.Error(), struct{}{})
 }
 
 // Unauthorized 未认证响应
 func Unauthorized(c *gin.Context) {
-	Custom(c, http.StatusUnauthorized, 401, "未认证", struct{}{})
+	Custom(c, http.StatusUnauthorized, apierr.Unauthorized.Code, apierr.Unauthorized.Error(), struct{}{})
 }
 
 // Forbidden 权限不足响应
 func Forbidden(c *gin.Context) {
-	Custom(c, http.StatusForbidden, 401, "权限不足", struct{}{})
+	Custom(c, http.StatusForbidden, apierr.Forbidden.Code, apierr.Forbidden.Error(), struct{}{})
 }
