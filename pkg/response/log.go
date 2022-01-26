@@ -3,7 +3,7 @@ package response
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
-	"github.com/mittacy/ego-layout/pkg/log"
+	"github.com/mittacy/log"
 )
 
 // CheckErrAndLog 检查是否为指定的业务错误，记录日志并响应
@@ -18,7 +18,7 @@ func CheckErrAndLog(c *gin.Context, logger *log.Logger, req interface{}, title s
 		return
 	}
 
-	logger.BizErrorLogWithTrace(c, title, sourceErr, req)
+	logger.ErrorwWithTrace(c, title, "req", req, "err", sourceErr)
 	Unknown(c)
 	return
 }

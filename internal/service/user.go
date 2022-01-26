@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/mittacy/ego-layout/internal/data"
 	"github.com/mittacy/ego-layout/internal/model"
-	"github.com/mittacy/ego-layout/pkg/log"
+	"github.com/mittacy/log"
 )
 
 // 一般情况下service应该只包含并调用自己的data模型，需要其他服务的功能请service.Xxx调用服务而不是引入其他data模型

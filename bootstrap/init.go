@@ -3,9 +3,10 @@ package bootstrap
 import (
 	"flag"
 	"github.com/gin-gonic/gin"
+	"github.com/mittacy/ego-layout/middleware"
 	"github.com/mittacy/ego-layout/pkg/config"
-	"github.com/mittacy/ego-layout/pkg/log"
 	"github.com/mittacy/ego-layout/utils/serverUtil"
+	"github.com/mittacy/log"
 	"github.com/spf13/viper"
 	"go.uber.org/zap/zapcore"
 )
@@ -48,11 +49,13 @@ func init() {
 		},
 	}
 
-	log.SetGlobalConfig(
+	log.SetDefaultConf(
 		log.WithPath(logPath),
+		log.WithTimeFormat("2006-01-02 15:04:05"),
 		log.WithLevel(logLevel),
+		log.WithPreName("biz_"),
+		log.WithEncoderJSON(logEncoderJson),
+		log.WithFields(globalFields...),
 		log.WithLogInConsole(logInConsole),
-		log.WithGlobalFields(globalFields...),
-		log.WithGlobalEncoderJSON(logEncoderJson))
-	log.InitStd()
+		log.WithRequestIdKey(middleware.RequestIdKey))
 }

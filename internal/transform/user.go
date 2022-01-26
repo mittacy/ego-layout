@@ -5,8 +5,8 @@ import (
 	"github.com/jinzhu/copier"
 	"github.com/mittacy/ego-layout/internal/model"
 	"github.com/mittacy/ego-layout/internal/validator/userValidator"
-	"github.com/mittacy/ego-layout/pkg/log"
 	"github.com/mittacy/ego-layout/pkg/response"
+	"github.com/mittacy/log"
 )
 
 var User userTransform
@@ -29,7 +29,7 @@ func (ctl *userTransform) GetUserReply(c *gin.Context, req interface{}, data *mo
 	replyUser := userValidator.GetReply{}
 
 	if err := copier.Copy(&replyUser, data); err != nil {
-		ctl.logger.CopierErrLog(err, req)
+		ctl.logger.ErrorwWithTrace(c, "copier", "req", req, "err", err)
 		response.Unknown(c)
 		return
 	}

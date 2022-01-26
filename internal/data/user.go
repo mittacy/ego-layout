@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/mittacy/ego-layout/internal/model"
-	"github.com/mittacy/ego-layout/pkg/log"
+	"github.com/mittacy/log"
 	"github.com/spf13/viper"
 )
 

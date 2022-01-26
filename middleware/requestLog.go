@@ -3,7 +3,7 @@ package middleware
 import (
 	"bytes"
 	"github.com/gin-gonic/gin"
-	"github.com/mittacy/ego-layout/pkg/log"
+	"github.com/mittacy/log"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"io/ioutil"

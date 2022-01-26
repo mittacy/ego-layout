@@ -5,8 +5,8 @@ import (
 	_ "github.com/mittacy/ego-layout/bootstrap"
 	"github.com/mittacy/ego-layout/interface/task"
 	"github.com/mittacy/ego-layout/middleware"
-	"github.com/mittacy/ego-layout/pkg/log"
 	"github.com/mittacy/ego-layout/router"
+	"github.com/mittacy/log"
 	"github.com/spf13/viper"
 	"net/http"
 	"time"
@@ -28,7 +28,7 @@ func main() {
 
 	// 启动API服务
 	if err := serve(r); err != nil {
-		log.Panicw("API服务异常退出", "err", err)
+		log.New("default").Panicw("API服务异常退出", "err", err)
 	}
 }
 
@@ -42,7 +42,7 @@ func serve(r *gin.Engine) error {
 		MaxHeaderBytes: 1 << 20,
 	}
 
-	log.Infow("服务启动", "端口号", s.Addr)
+	log.New("default").Infow("服务启动", "端口号", s.Addr)
 
 	return s.ListenAndServe()
 }

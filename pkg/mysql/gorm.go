@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
 	"moul.io/zapgorm2"
 	"time"
@@ -19,14 +20,16 @@ var (
 func init() {
 	dbPool = make(map[string]*gorm.DB, 0)
 
-	slowThreshold := viper.GetDuration("GORM_SLOW_LOG_THRESHOLD") * time.Millisecond
-	if slowThreshold == 0 {
-		slowThreshold = time.Millisecond * 100
-	}
-
 	l := log.New("gorm")
 	gormLogger = zapgorm2.New(l.GetZap())
-	gormLogger.SlowThreshold = slowThreshold
+
+	if viper.GetDuration("GORM_SLOW_LOG_THRESHOLD") == 0 {
+		gormLogger.SlowThreshold = time.Millisecond * 100
+	} else {
+		gormLogger.SlowThreshold = viper.GetDuration("GORM_SLOW_LOG_THRESHOLD") * time.Millisecond
+	}
+	gormLogger.LogLevel = logger.Info
+	gormLogger.IgnoreRecordNotFoundError = true
 	gormLogger.SetAsDefault()
 }
 

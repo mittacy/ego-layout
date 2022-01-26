@@ -1,6 +1,6 @@
 package task
 
-import "github.com/mittacy/ego-layout/pkg/log"
+import "github.com/mittacy/log"
 
 type cronLog struct {
 	l *log.Logger
