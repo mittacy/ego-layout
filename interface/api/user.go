@@ -35,7 +35,7 @@ func (ctl *userApi) GetUser(c *gin.Context) {
 		return
 	}
 
-	user, err := service.User.GetById(req.Id)
+	user, err := service.User.GetById(c, req.Id)
 	if err != nil {
 		response.CheckErrAndLog(c, ctl.logger, req, "getUser", err, apierr.UserNoExist)
 		return

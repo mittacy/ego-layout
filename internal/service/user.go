@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/mittacy/ego-layout/internal/data"
 	"github.com/mittacy/ego-layout/internal/model"
 	"github.com/mittacy/ego-layout/pkg/log"
@@ -15,7 +16,7 @@ func init() {
 
 	User = userService{
 		logger: l,
-		data: data.NewUser(l),
+		data:   data.NewUser(l),
 	}
 }
 
@@ -24,6 +25,6 @@ type userService struct {
 	data   data.User
 }
 
-func (ctl *userService) GetById(id int64) (*model.User, error) {
-	return ctl.data.GetById(id)
+func (ctl *userService) GetById(c *gin.Context, id int64) (*model.User, error) {
+	return ctl.data.GetById(c, id)
 }

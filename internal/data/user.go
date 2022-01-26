@@ -2,6 +2,7 @@ package data
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/mittacy/ego-layout/internal/model"
 	"github.com/mittacy/ego-layout/pkg/log"
 	"github.com/spf13/viper"
@@ -23,7 +24,7 @@ func NewUser(l *log.Logger) User {
 	}
 }
 
-func (ctl *User) GetById(id int64) (*model.User, error) {
+func (ctl *User) GetById(c *gin.Context, id int64) (*model.User, error) {
 	//user := model.User{}
 	//if err := ctl.db.Where("id = ?", id).First(&user).Error; err != nil {
 	//	if errors.Is(err, gorm.ErrRecordNotFound) {
