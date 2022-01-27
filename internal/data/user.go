@@ -28,7 +28,7 @@ func (ctl *User) GetById(c *gin.Context, id int64) (*model.User, error) {
 	//user := model.User{}
 	//if err := ctl.db.Where("id = ?", id).First(&user).Error; err != nil {
 	//	if errors.Is(err, gorm.ErrRecordNotFound) {
-	//		return nil, apierr.ErrUserNoExist
+	//		return nil, apierr.UserNoExist
 	//	}
 	//
 	//	return nil, errors.WithStack(err)

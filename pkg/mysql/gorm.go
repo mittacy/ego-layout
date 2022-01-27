@@ -2,7 +2,7 @@ package mysql
 
 import (
 	"fmt"
-	"github.com/mittacy/ego-layout/pkg/log"
+	"github.com/mittacy/log"
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -15,12 +15,13 @@ import (
 var (
 	dbPool     map[string]*gorm.DB
 	gormLogger zapgorm2.Logger // gorm日志句柄
+	l          *log.Logger
 )
 
 func init() {
 	dbPool = make(map[string]*gorm.DB, 0)
 
-	l := log.New("gorm")
+	l = log.New("gorm")
 	gormLogger = zapgorm2.New(l.GetZap())
 
 	if viper.GetDuration("GORM_SLOW_LOG_THRESHOLD") == 0 {
@@ -42,7 +43,7 @@ func NewClientByName(name string) *gorm.DB {
 		return NewClient(conf)
 	}
 
-	log.Panicf("%s 配置不存在, 请在 pkg/mysql/config.go GetConfig() 中配置", name)
+	l.Errorf("%s 配置不存在, 请在 pkg/mysql/config.go GetConfig() 中配置", name)
 	return nil
 }
 
@@ -51,7 +52,7 @@ func NewClientByName(name string) *gorm.DB {
 // @return *gorm.DB gorm连接
 // @return error
 func NewClient(conf Conf) *gorm.DB {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?parseTime=true", conf.User, conf.Password, conf.Host, conf.Port, conf.Database)
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?parseTime=true&loc=Local", conf.User, conf.Password, conf.Host, conf.Port, conf.Database)
 	if conf.Params != "" {
 		dsn = fmt.Sprintf("%s&%s", dsn, conf.Params)
 	}
@@ -65,7 +66,7 @@ func NewClient(conf Conf) *gorm.DB {
 		Logger:         gormLogger,
 	})
 	if err != nil {
-		log.Panicf("连接数据库失败, 检查配置, err: %s, conf: %+v", err, conf)
+		l.Errorf("连接数据库失败, 检查配置, err: %s, conf: %+v", err, conf)
 	}
 
 	dbPool[dsn] = db
