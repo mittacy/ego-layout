@@ -7,22 +7,12 @@ import (
 	"github.com/mittacy/ego-layout/internal/transform"
 	"github.com/mittacy/ego-layout/internal/validator/userValidator"
 	"github.com/mittacy/ego-layout/pkg/response"
-	"github.com/mittacy/log"
+	"github.com/mittacy/ego/library/log"
 )
 
 var User userApi
 
-func init() {
-	l := log.New("user")
-
-	User = userApi{
-		logger: l,
-	}
-}
-
-type userApi struct {
-	logger *log.Logger
-}
+type userApi struct {}
 
 func (ctl *userApi) Ping(c *gin.Context) {
 	response.Success(c, "success")
@@ -37,7 +27,7 @@ func (ctl *userApi) GetUser(c *gin.Context) {
 
 	user, err := service.User.GetById(c, req.Id)
 	if err != nil {
-		response.CheckErrAndLog(c, ctl.logger, req, "getUser", err, apierr.UserNoExist)
+		response.CheckErrAndLog(c, log.New("user"), req, "getUser", err, apierr.UserNoExist)
 		return
 	}
 

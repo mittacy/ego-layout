@@ -29,43 +29,35 @@
 ### 2. 项目结构
 
 ```shell
-├── bootstrap					# 初始化顺序调用封装
-│   └── init.go
+├── bootstrap					# 初始化封装
+│   ├── http.go
+│   ├── job.go
+│   ├── log.go
+│   ├── task.go
+│   └── viper.go
 ├── apierr						# 服务错误码和错误定义
 │   ├── code.go
 │   └── err.go
-├── pkg							# 各种外部工具封装
-│   ├── cache					# 缓存封装
-│   │   ├── config.go
-│   │   └── redis.go
-│   ├── config					# 配置全局初始化、配置结构
-│   │   └── viper.go
-│   ├── log						# 日志封装
-│   │   ├── biz.go
-│   │   ├── config.go
-│   │   ├── log.go
-│   │   ├── zap.go
-│   │   └── zap_test.go
-│   ├── mysql					# mysql封装
-│   │   ├── config.go
-│   │   └── gorm.go
-│   └── response				# 响应封装
-│       ├── log.go
-│       ├── response.go
-│       └── validator.go
-├── cmd							# 服务
-│   ├── api						# API监听服务
-│   │   └── main.go
-│   └── job						# 流式任务处理服务
-│       └── main.go
-├── interface				    # 对外服务
-│   ├── api						# API控制器
+├── cmd							# 服务命令
+│   └── start					# start命令，启动http、job、task
+│       ├── start.go
+│       ├── http
+│       │   └── http.go
+│       ├── job
+│       │   └── job.go
+│       └── task
+│           └── task.go					
+├── app									# 服务
+│   ├── api								# API控制器
 │   │   └── user.go
-│   ├── job						# 流式任务
-│   │   └── exampleJob
-│   │       ├── processor.go	# 任务处理器
-│   │       └── task.go			# 生成任务
-│   └── task					# 定时任务
+│   ├── job								# 异步任务
+│   │   └── exampleJob					
+│   │       ├── exampleJobProcessor		# 任务处理器
+│   │       │   └── processor.go
+│   │       └── exampleJobTask			# 生成任务
+│   │           └── task.go
+│   └── task							# 定时任务
+│       └── example.go
 ├── internal					# 内部服务
 │   └── validator				# 数据请求、响应结构体定义以及参数校验
 │   │   └── userValidator
@@ -77,11 +69,12 @@
 │   ├── data					# 数据查询、存储层
 │   │   └── user.go
 │   └── model					# 定义与数据库的映射结构体
-│       └── user.go
-├── middleware              	# 中间件
+│       └── user.go          	
+├── middleware					# 中间件
+│   ├── requestLog.go			# 请求日志记录中间件
+│   └── requestTrace.go			# 请求追踪中间件
 └── router						# 路由
 │   ├── admin.go
-│   ├── request.go
 │   └── router.go
 ├── Makefile
 ├── main.go
@@ -97,13 +90,12 @@
 - 安装Mysql（如果需要）
 - 安装Redis（如果需要）
 
-建议开启GO111MODULE
+设置env
 
 ```shell
 $ go env -w GO111MODULE=on
+$ go env -w GOPROXY=https://goproxy.cn,direct
 ```
-
-如果拉取依赖遇到网络问题，建议[配置GOPROXY](https://goproxy.cn/)‌
 
 ### 2. 修改配置信息
 
@@ -120,58 +112,48 @@ $ go env -w GO111MODULE=on
 ```shell
 $ cd myProjectName
 $ go mod download
+$ go  build -o ./bin/server main.go
 
-# 运行流式处理任务
-$ go run cmd/job/main.go -config .env.development -env development -port 8080
+# 运行异步任务服务
+$ ./bin/server start job -c=.env.development -e=development
 
-# 运行API监听服务
-$ go run cmd/api/main.go -config .env.development -env development -port 8080
+# 运行定时任务
+$ ./bin/server start task -c=.env.development -e=development
+
+# 运行HTTP服务
+$ ./bin/server start http -c=.env.development -e=development -p=8080
 
 $ curl localhost:8080/api/user/ping
-{"code":0,"data":"success","msg":"success"}
+{"code":0,"data":"success","msg":"success","request_id":"r61f641e8bf370_pkL0LEODq4N2PyASnn"}
 ```
 
-> -config 参数，配置文件路径，默认为 `./.env.development`
->
-> -env 服务运行环境，development/test/production
+> Flags:
+>   -c, --conf string   配置文件路径 (default ".env.development")
+>   -e, --env string    运行环境 (default "development")
 >
 > + development 会将日志同步打印到控制台
 > + test/production 不会将日志打印到控制台，正式环境应该设置为 production
 >
-> -port 服务端口，默认为 10244
+>   -p, --port int      监听端口 (default 8080)
 
-#### 3.2 使用 Makefile
-
-进入Makefile修改响应配置：
+#### 3.2 Docker启动
 
 ```shell
-SERVER = ego-layout
-CONFIG = .env.development
-PORT = 10244
-ENV = release
+$ docker build -t 镜像名 .
+
+# 启动http服务
+$ docker run --restart=on-failure --name 服务名1 -d -p 宿主端口:8080 镜像名 start http -c=.env.development -e=production -p 8080
+# 简写
+$ docker run --restart=on-failure --name 服务名1 -d -p 宿主端口:8080 镜像名
+
+# 启动job异步服务
+$ docker run --restart=on-failure --name 服务名2 -d -p 宿主端口:8080 镜像名 start job -c=.env.development -e=production
+
+# 启动task定时服务
+$ docker run --restart=on-failure --name 服务名2 -d -p 宿主端口:8080 镜像名 start task -c=.env.development -e=production
 ```
 
-启动服务
 
-```shell
-$ make clean
-
-# 启动服务
-$ make job-start
-$ make api-start
-
-$ curl localhost:10244/api/user/ping
-{"code":0,"data":"success","msg":"success"}
-
-# 优雅重启服务，不中断服务
-$ make api-restart
-# job任务需要中断重启
-$ make job-restart
-
-# 停止服务
-$ make api-stop
-$ make job-stop
-```
 
 ### 4. 生成业务框架代码
 

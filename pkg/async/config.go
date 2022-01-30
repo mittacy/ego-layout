@@ -2,7 +2,7 @@ package async
 
 import (
 	"github.com/hibiken/asynq"
-	"github.com/mittacy/ego-layout/pkg/log"
+	"github.com/mittacy/ego/library/log"
 	"github.com/spf13/viper"
 	"sync"
 	"time"

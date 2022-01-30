@@ -1,4 +1,4 @@
-package config
+package bootstrap
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"log"
 )
 
-func Init(file string) {
+func InitViper(file string, env string, port int) {
 	viper.SetConfigType("env")
 	viper.SetConfigFile(file)
 	if err := viper.ReadInConfig(); err != nil {
@@ -21,4 +21,13 @@ func Init(file string) {
 		log.Printf("some configuration item in the %s file has changed", e.Name)
 	})
 	viper.WatchConfig()
+
+	// 环境变量覆盖值
+	if port != 0 {
+		viper.Set("APP_PORT", port)
+	}
+
+	if env != "" {
+		viper.Set("APP_ENV", env)
+	}
 }

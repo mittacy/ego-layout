@@ -4,29 +4,37 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/mittacy/ego-layout/internal/model"
-	"github.com/mittacy/log"
+	"github.com/mittacy/ego/library/mysql"
+	"github.com/mittacy/ego/library/redis"
 	"github.com/spf13/viper"
 )
 
 type User struct {
-	//db          *gorm.DB
-	//cache       *redis.Client
+	mysql.Gorm
+	redis.GoRedis
 	cacheKeyPre string
-	logger      *log.Logger
 }
 
-func NewUser(l *log.Logger) User {
+func NewUser() User {
 	return User{
-		//db:          mysql.NewClientByName("localhost"),
-		//cache:       cache.NewClientByName("localhost", 0),
+		Gorm: mysql.Gorm{
+			MysqlConfName: "localhost",
+		},
+		GoRedis: redis.GoRedis{
+			RedisConfName: "localhost",
+			RedisDB:       0,
+		},
 		cacheKeyPre: fmt.Sprintf("%s:user", viper.GetString("APP_NAME")),
-		logger:      l,
 	}
 }
 
 func (ctl *User) GetById(c *gin.Context, id int64) (*model.User, error) {
+	//if err := ctl.Redis().Set(context.Background(), "name", "xiyangyang", time.Second * 10).Err(); err != nil {
+	//	return nil, err
+	//}
+	//
 	//user := model.User{}
-	//if err := ctl.db.Where("id = ?", id).First(&user).Error; err != nil {
+	//if err := ctl.DB().Where("id = ?", id).First(&user).Error; err != nil {
 	//	if errors.Is(err, gorm.ErrRecordNotFound) {
 	//		return nil, apierr.UserNoExist
 	//	}

@@ -3,7 +3,8 @@ package response
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
-	"github.com/mittacy/log"
+	"github.com/mittacy/ego/library/log"
+	"net/http"
 )
 
 // CheckErrAndLog 检查是否为指定的业务错误，记录日志并响应
@@ -19,7 +20,11 @@ func CheckErrAndLog(c *gin.Context, logger *log.Logger, req interface{}, title s
 	}
 
 	logger.ErrorwWithTrace(c, title, "req", req, "err", sourceErr)
-	Unknown(c)
+	if gin.Mode() == gin.ReleaseMode {
+		Unknown(c)
+	} else {
+		Custom(c, http.StatusOK, 500, sourceErr.Error(), struct {}{})
+	}
 	return
 }
 

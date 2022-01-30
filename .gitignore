@@ -4,3 +4,4 @@
 *.log
 ego-layout*
 storage/
+bin/

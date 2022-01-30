@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/hibiken/asynq"
-	"github.com/mittacy/ego-layout/interface/job/exampleJob/exampleJobTask"
+	"github.com/mittacy/ego-layout/app/job/exampleJob/exampleJobTask"
 	"github.com/mittacy/ego-layout/pkg/async"
-	"github.com/mittacy/ego-layout/pkg/log"
+	"github.com/mittacy/ego/library/log"
 	"time"
 )
 

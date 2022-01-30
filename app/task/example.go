@@ -1,7 +1,7 @@
 package task
 
 import (
-	"github.com/mittacy/log"
+	"github.com/mittacy/ego/library/log"
 	"github.com/robfig/cron/v3"
 )
 
