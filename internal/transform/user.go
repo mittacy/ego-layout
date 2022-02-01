@@ -5,13 +5,13 @@ import (
 	"github.com/jinzhu/copier"
 	"github.com/mittacy/ego-layout/internal/model"
 	"github.com/mittacy/ego-layout/internal/validator/userValidator"
-	"github.com/mittacy/ego-layout/pkg/response"
+	"github.com/mittacy/ego/library/gin/response"
 	"github.com/mittacy/ego/library/log"
 )
 
 var User userTransform
 
-type userTransform struct {}
+type userTransform struct{}
 
 // GetUserReply 用户详情响应
 // @param data 数据库数据

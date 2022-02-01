@@ -4,13 +4,13 @@ go 1.16
 
 require (
 	github.com/fsnotify/fsnotify v1.5.1
-	github.com/gin-gonic/gin v1.7.4
+	github.com/gin-gonic/gin v1.7.7
 	github.com/go-playground/locales v0.14.0
 	github.com/go-playground/universal-translator v0.18.0
 	github.com/go-playground/validator/v10 v10.9.0
 	github.com/hibiken/asynq v0.19.0
 	github.com/jinzhu/copier v0.3.2
-	github.com/mittacy/ego v1.6.10
+	github.com/mittacy/ego v1.6.11
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/spf13/cobra v1.3.0

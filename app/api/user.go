@@ -6,13 +6,13 @@ import (
 	"github.com/mittacy/ego-layout/internal/service"
 	"github.com/mittacy/ego-layout/internal/transform"
 	"github.com/mittacy/ego-layout/internal/validator/userValidator"
-	"github.com/mittacy/ego-layout/pkg/response"
+	"github.com/mittacy/ego/library/gin/response"
 	"github.com/mittacy/ego/library/log"
 )
 
 var User userApi
 
-type userApi struct {}
+type userApi struct{}
 
 func (ctl *userApi) Ping(c *gin.Context) {
 	response.Success(c, "success")
