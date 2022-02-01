@@ -3,8 +3,10 @@ package http
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/mittacy/ego-layout/bootstrap"
+	"github.com/mittacy/ego-layout/config"
 	"github.com/mittacy/ego-layout/middleware"
 	"github.com/mittacy/ego-layout/router"
+	"github.com/mittacy/ego/library/async"
 	"github.com/mittacy/ego/library/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -28,14 +30,17 @@ var (
 
 func init() {
 	Cmd.Flags().StringVarP(&conf, "conf", "c", ".env.development", "配置文件路径")
-	Cmd.Flags().StringVarP(&env, "env", "e","development", "运行环境")
-	Cmd.Flags().IntVarP(&port, "port", "p",8080, "监听端口")
+	Cmd.Flags().StringVarP(&env, "env", "e", "development", "运行环境")
+	Cmd.Flags().IntVarP(&port, "port", "p", 8080, "监听端口")
 }
 
 func run(cmd *cobra.Command, args []string) {
 	bootstrap.InitHTTP(conf, env, port)
 	l = log.New("http")
 	l.Infow("conf message", "conf", conf, "env", env, "port", port)
+
+	// 初始化异步服务连接，后续才能插入队列
+	async.Init(config.AsyncRedisClientOpt())
 
 	// 启动http服务
 	r := gin.New()

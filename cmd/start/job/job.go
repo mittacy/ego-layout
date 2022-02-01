@@ -2,10 +2,9 @@ package job
 
 import (
 	"github.com/hibiken/asynq"
-	"github.com/mittacy/ego-layout/app/job/exampleJob/exampleJobProcessor"
-	"github.com/mittacy/ego-layout/app/job/exampleJob/exampleJobTask"
 	"github.com/mittacy/ego-layout/bootstrap"
-	"github.com/mittacy/ego-layout/pkg/async"
+	"github.com/mittacy/ego-layout/config"
+	"github.com/mittacy/ego/library/async"
 	"github.com/mittacy/ego/library/log"
 	"github.com/spf13/cobra"
 )
@@ -28,29 +27,15 @@ func init() {
 	Cmd.Flags().StringVarP(&env, "env", "e", "development", "运行环境")
 }
 
-type Job struct {
-	TypeName string
-	Handler  asynq.Handler
-}
-
-// Jobs 异步任务列表，新增的任务在此添加即可
-func Jobs() []Job {
-	return []Job{
-		{exampleJobTask.TypeName, exampleJobProcessor.NewProcessor()},
-	}
-}
-
 func run(cmd *cobra.Command, args []string) {
 	bootstrap.InitJob(conf, env)
+	async.InitLog()
+
 	l = log.New("job")
 	l.Infow("conf message", "conf", conf, "env", env)
 
-	jobs := Jobs()
-
-	srv := asynq.NewServer(
-		async.GetDefaultRedisConnOpt(),
-		async.GetDefaultServerConfig(),
-	)
+	jobs := config.Jobs()
+	srv := asynq.NewServer(config.AsyncRedisClientOpt(), config.AsyncConfig())
 
 	mux := asynq.NewServeMux()
 	for _, v := range jobs {
