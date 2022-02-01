@@ -3,9 +3,9 @@ package api
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/mittacy/ego-layout/apierr"
-	"github.com/mittacy/ego-layout/internal/service"
-	"github.com/mittacy/ego-layout/internal/transform"
-	"github.com/mittacy/ego-layout/internal/validator/userValidator"
+	"github.com/mittacy/ego-layout/app/internal/service"
+	"github.com/mittacy/ego-layout/app/internal/transform"
+	"github.com/mittacy/ego-layout/app/internal/validator/userValidator"
 	"github.com/mittacy/ego/library/gin/response"
 	"github.com/mittacy/ego/library/log"
 )

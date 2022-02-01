@@ -16,5 +16,5 @@ func (*User) TableName() string {
 
 const (
 	// 状态
-	UserStateDeleted = 100	// 删除
+	UserStateDeleted = 100 // 删除
 )

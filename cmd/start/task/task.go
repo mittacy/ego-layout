@@ -1,8 +1,8 @@
 package task
 
 import (
-	"github.com/mittacy/ego-layout/app/task"
 	"github.com/mittacy/ego-layout/bootstrap"
+	"github.com/mittacy/ego-layout/config"
 	"github.com/mittacy/ego/library/log"
 	"github.com/robfig/cron/v3"
 	"github.com/spf13/cobra"
@@ -26,26 +26,11 @@ func init() {
 	Cmd.Flags().StringVarP(&env, "env", "e", "development", "运行环境")
 }
 
-type Task interface {
-	// Name 任务名
-	Name() string
-	// Spec 定时规则
-	Spec() string
-	// Job cron任务
-	Job() cron.Job
-}
-
-func Tasks(logger *log.Logger) []Task {
-	return []Task{
-		task.NewExample(logger),
-	}
-}
-
 func run(cmd *cobra.Command, args []string) {
 	bootstrap.InitTask(conf, env)
 	l = log.New("task")
 
-	var Tasks = Tasks(l)
+	var Tasks = config.Tasks(l)
 
 	c := cron.New()
 

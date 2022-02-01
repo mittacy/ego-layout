@@ -3,7 +3,7 @@ package data
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/mittacy/ego-layout/internal/model"
+	"github.com/mittacy/ego-layout/app/internal/model"
 	"github.com/mittacy/ego/library/mysql"
 	"github.com/mittacy/ego/library/redis"
 	"github.com/spf13/viper"

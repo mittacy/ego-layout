@@ -3,8 +3,8 @@ package transform
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
-	"github.com/mittacy/ego-layout/internal/model"
-	"github.com/mittacy/ego-layout/internal/validator/userValidator"
+	"github.com/mittacy/ego-layout/app/internal/model"
+	"github.com/mittacy/ego-layout/app/internal/validator/userValidator"
 	"github.com/mittacy/ego/library/gin/response"
 	"github.com/mittacy/ego/library/log"
 )
