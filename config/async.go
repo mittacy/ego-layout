@@ -2,21 +2,11 @@ package config
 
 import (
 	"github.com/hibiken/asynq"
-	"github.com/mittacy/ego-layout/config/async_job"
 	"github.com/mittacy/ego/library/async"
 	"github.com/mittacy/ego/library/log"
 	"github.com/spf13/viper"
 	"time"
 )
-
-func Jobs() []async.Job {
-	return []async.Job{
-		{
-			async_job.ExampleTypeName,
-			async_job.NewExample(),
-		},
-	}
-}
 
 // AsyncRedisClientOpt is used to create a redis client that connects
 // to a redis server directly.

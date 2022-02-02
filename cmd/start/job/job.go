@@ -4,6 +4,7 @@ import (
 	"github.com/hibiken/asynq"
 	"github.com/mittacy/ego-layout/bootstrap"
 	"github.com/mittacy/ego-layout/config"
+	"github.com/mittacy/ego-layout/config/async_config"
 	"github.com/mittacy/ego/library/async"
 	"github.com/mittacy/ego/library/log"
 	"github.com/spf13/cobra"
@@ -34,7 +35,7 @@ func run(cmd *cobra.Command, args []string) {
 	l = log.New("job")
 	l.Infow("conf message", "conf", conf, "env", env)
 
-	jobs := config.Jobs()
+	jobs := async_config.Jobs()
 	srv := asynq.NewServer(config.AsyncRedisClientOpt(), config.AsyncConfig())
 
 	mux := asynq.NewServeMux()
