@@ -6,6 +6,7 @@ import (
 	"github.com/mittacy/ego-layout/config"
 	"github.com/mittacy/ego-layout/middleware"
 	"github.com/mittacy/ego-layout/router"
+	"github.com/mittacy/ego/hook"
 	"github.com/mittacy/ego/library/async"
 	"github.com/mittacy/ego/library/log"
 	"github.com/spf13/cobra"
@@ -68,6 +69,6 @@ func serve(r *gin.Engine) error {
 	}
 
 	l.Infow("服务启动", "端口号", s.Addr)
-
+	hook.Run(hook.BeforeStart)
 	return s.ListenAndServe()
 }

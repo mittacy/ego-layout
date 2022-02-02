@@ -348,8 +348,8 @@ github.com/mitchellh/mapstructure v1.1.2/go.mod h1:FVVH3fgwuzCH5S8UJGiWEs2h04kUh
 github.com/mitchellh/mapstructure v1.4.1/go.mod h1:bFUtVrKA4DC2yAKiSyO/QUcy7e+RRV2QTWOzhPopBRo=
 github.com/mitchellh/mapstructure v1.4.3 h1:OVowDSCllw/YjdLkam3/sm7wEtOy59d8ndGgCcyj8cs=
 github.com/mitchellh/mapstructure v1.4.3/go.mod h1:bFUtVrKA4DC2yAKiSyO/QUcy7e+RRV2QTWOzhPopBRo=
-github.com/mittacy/ego v1.6.12 h1:jxeS+bVeGjVL5frxdDPGXWxfRY1YV1GSQDhq0aHBPwE=
-github.com/mittacy/ego v1.6.12/go.mod h1:uDfLnJiufgZWSXj4B13Hz18GfTNV2mQloguFjfhto1g=
+github.com/mittacy/ego v1.6.16 h1:0eD3o41hBmjz2vf2lZ2TmU2oVBGC320cC3O4coifuIA=
+github.com/mittacy/ego v1.6.16/go.mod h1:uDfLnJiufgZWSXj4B13Hz18GfTNV2mQloguFjfhto1g=
 github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421/go.mod h1:6dJC0mAP4ikYIbvyc7fijjWJddQyLn8Ig3JB5CqoB9Q=
 github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd h1:TRLaZ9cD/w8PVh93nsPXa1VrQ6jlwL5oN8l14QlcNfg=
 github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd/go.mod h1:6dJC0mAP4ikYIbvyc7fijjWJddQyLn8Ig3JB5CqoB9Q=

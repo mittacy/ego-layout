@@ -3,6 +3,7 @@ package task
 import (
 	"github.com/mittacy/ego-layout/bootstrap"
 	"github.com/mittacy/ego-layout/config"
+	"github.com/mittacy/ego/hook"
 	"github.com/mittacy/ego/library/log"
 	"github.com/robfig/cron/v3"
 	"github.com/spf13/cobra"
@@ -43,6 +44,7 @@ func run(cmd *cobra.Command, args []string) {
 		}
 	}
 
+	hook.Run(hook.BeforeStart)
 	c.Start()
 	defer c.Stop()
 	select {}

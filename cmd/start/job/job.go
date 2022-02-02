@@ -5,6 +5,7 @@ import (
 	"github.com/mittacy/ego-layout/bootstrap"
 	"github.com/mittacy/ego-layout/config"
 	"github.com/mittacy/ego-layout/config/async_config"
+	"github.com/mittacy/ego/hook"
 	"github.com/mittacy/ego/library/async"
 	"github.com/mittacy/ego/library/log"
 	"github.com/spf13/cobra"
@@ -43,6 +44,7 @@ func run(cmd *cobra.Command, args []string) {
 		mux.Handle(v.TypeName, v.Handler)
 	}
 
+	hook.Run(hook.BeforeStart)
 	if err := srv.Run(mux); err != nil {
 		l.Panicf("队列服务异常退出: %+v", err)
 	}
