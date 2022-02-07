@@ -15,7 +15,7 @@ type userTransform struct{}
 
 // GetUserReply 用户详情响应
 // @param data 数据库数据
-func (ctl *userTransform) GetUserReply(c *gin.Context, req interface{}, data *model.User) {
+func (ctl *userTransform) GetUserReply(c *gin.Context, req interface{}, data model.User) {
 	replyUser := userValidator.GetReply{}
 
 	if err := copier.Copy(&replyUser, data); err != nil {

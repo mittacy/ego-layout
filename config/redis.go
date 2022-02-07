@@ -1,14 +1,14 @@
 package config
 
 import (
-	"github.com/mittacy/ego/library/redis"
+	"github.com/mittacy/ego/library/eRedis"
 	"github.com/spf13/viper"
 )
 
-var redisConfigs map[string]redis.Conf
+var redisConfigs map[string]eRedis.Conf
 
 func InitRedis() {
-	redisConfigs = map[string]redis.Conf{
+	redisConfigs = map[string]eRedis.Conf{
 		"localhost": {
 			Host:        viper.GetString("REDIS_LOCALHOST_RW_HOST"),
 			Password:    viper.GetString("REDIS_LOCALHOST_RW_PASSWORD"),
@@ -18,5 +18,5 @@ func InitRedis() {
 			IdleTimeout: viper.GetDuration("REDIS_LOCALHOST_IDLE_TIMEOUT"),
 		},
 	}
-	redis.InitRedis(redisConfigs)
+	eRedis.InitRedis(redisConfigs)
 }

@@ -8,8 +8,7 @@ require (
 	github.com/go-playground/validator/v10 v10.9.0 // indirect
 	github.com/hibiken/asynq v0.21.0
 	github.com/jinzhu/copier v0.3.2
-	github.com/mittacy/ego v1.6.16
-	github.com/pkg/errors v0.9.1 // indirect
+	github.com/mittacy/ego v1.6.22
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/spf13/cobra v1.3.0
 	github.com/spf13/viper v1.10.0

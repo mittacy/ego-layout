@@ -16,6 +16,6 @@ type userService struct {
 	data data.User
 }
 
-func (ctl *userService) GetById(c *gin.Context, id int64) (*model.User, error) {
+func (ctl *userService) GetById(c *gin.Context, id int64) (model.User, error) {
 	return ctl.data.GetById(c, id)
 }

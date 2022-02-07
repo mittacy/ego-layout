@@ -1,24 +1,24 @@
 package config
 
 import (
-	"github.com/mittacy/ego/library/mysql"
+	"github.com/mittacy/ego/library/eMysql"
 	"github.com/spf13/viper"
 )
 
-var mysqlConfigs map[string]mysql.Conf
+var mysqlConfigs map[string]eMysql.Conf
 
 func InitGorm() {
-	mysqlConfigs = map[string]mysql.Conf{
+	mysqlConfigs = map[string]eMysql.Conf{
 		"localhost": {
-			Host:     viper.GetString("DB_CORE_RW_HOST"),
-			Port:     viper.GetInt("DB_CORE_RW_PORT"),
-			Database: viper.GetString("DB_CORE_RW_DATABASE"),
-			User:     viper.GetString("DB_CORE_RW_USERNAME"),
-			Password: viper.GetString("DB_CORE_RW_PASSWORD"),
+			Host:     viper.GetString("DB_LOCALHOST_RW_HOST"),
+			Port:     viper.GetInt("DB_LOCALHOST_RW_PORT"),
+			Database: viper.GetString("DB_LOCALHOST_RW_DATABASE"),
+			User:     viper.GetString("DB_LOCALHOST_RW_USERNAME"),
+			Password: viper.GetString("DB_LOCALHOST_RW_PASSWORD"),
 		},
 	}
-	mysql.InitGorm(mysqlConfigs,
-		mysql.WithLogName("mysql"),
-		mysql.WithLogSlowThreshold(viper.GetDuration("GORM_SLOW_LOG_THRESHOLD")),
-		mysql.WithLogIgnoreRecordNotFound(true))
+	eMysql.InitGorm(mysqlConfigs,
+		eMysql.WithLogName("mysql"),
+		eMysql.WithLogSlowThreshold(viper.GetDuration("GORM_SLOW_LOG_THRESHOLD")),
+		eMysql.WithLogIgnoreRecordNotFound(true))
 }
